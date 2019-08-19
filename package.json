@@ -9,9 +9,14 @@
     "build": "parcel build src/popup.js -d src/build -o popup.js --no-minify"
   },
   "dependencies": {
+    "@babel/plugin-syntax-async-generators": "^7.2.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@octokit/rest": "^16.28.7",
+    "preact": "^10.0.0-rc.1",
     "query-string": "^6.8.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.5",
     "parcel-bundler": "^1.12.3"
   }
 }
