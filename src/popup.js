@@ -1,104 +1,91 @@
+require('dotenv').config();
+
 import { h, render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
+import { login } from './oauth';
+import { getCodeBlocks } from './get-code-blocks';
+import { setupCreateGist } from './create-gist';
+import Gist from './components/Gist';
+import List from './components/list/List';
+import ListItem from './components/list/components/ListItem';
 
-const queryString = require('query-string');
+import './popup.css';
 
-const CLIENT_ID = '9faa326dfcbe2fd88a93';
-const CLIENT_SECRET = 'acf05da3fc3662f78b741d0c07d5b718780ace86';
-const REDIRECT_URI =
-  'https://idgdjjeelpecmpjadkjemefojnncaefp.chromiumapp.org/';
-
-let token;
-
-// chrome.storage.local.set({ test: 'test' });
-// chrome.storage.local.get(['test'], res => console.log('RES', res));
-
-const login = e => {
-  e.preventDefault();
-  chrome.identity.launchWebAuthFlow(
-    {
-      url: `https://github.com/login/oauth/authorize?scope=user%20email%20gist&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`,
-      interactive: true,
-    },
-    url => {
-      console.log(queryString);
-      console.log(url);
-
-      const {
-        query: { code },
-      } = queryString.parseUrl(url);
-      console.log(code);
-
-      const baseUrl = 'https://github.com/login/oauth/access_token';
-      // The data we are going to send in our request
-      const params = {
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        code,
-        redirect_uri: REDIRECT_URI,
-      };
-      // The parameters we are gonna pass to the fetch function
-      const fetchData = {
-        method: 'POST',
-        headers: new Headers({ Accept: 'application/json' }),
-      };
-      const accessUrl = baseUrl + '?' + queryString.stringify(params);
-
-      fetch(accessUrl, fetchData).then(function(res) {
-        // Handle response you get from the server
-        console.log(res);
-        res.json().then(({ access_token: accessToken }) =>
-          // saveData({ accessToken }, () => {
-          //   loadData('accessToken', data => console.log(data));
-          //   console.log('Access token saved!');
-          // }),
-
-          // chrome.storage.local.set({ test: 'test' }, () =>
-          //   chrome.storage.local.get(['test'], res => console.log('RES', res)),
-          // ),
-          {
-            console.log('AT', accessToken);
-
-            chrome.storage.local.set({ accessToken }, () =>
-              chrome.storage.local.get(['accessToken'], res =>
-                console.log('AT RES', res),
-              ),
-            );
-          },
-        );
-      });
-    },
-  );
-};
-
-const saveData = (data, callback) => chrome.storage.local.set(data, callback);
+const Octokit = require('@octokit/rest');
 
 const loadData = (key, callback) => chrome.storage.local.get([key], callback);
 
-const signOut = () => chrome.storage.local.remove('accessToken');
+const signOut = setAccessToken => () =>
+  chrome.storage.local.remove('accessToken', () => setAccessToken(undefined));
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(undefined);
-  useEffect(() => {
-    loadData('accessToken', ({ accessToken }) => setAccessToken(accessToken));
-    chrome.storage.onChanged.addListener(({ accessToken: { newValue } }) =>
-      setAccessToken(newValue),
-    );
-    chrome.storage.onChanged.addListener(changed =>
-      console.log('CHANGE!', changed),
-    );
-  }, [setAccessToken, loadData]);
+  const [loading, setLoading] = useState(false);
+  const [codeBlocks, setCodeBlocks] = useState();
+  const [error, setError] = useState();
+  loadData('accessToken', ({ accessToken }) => setAccessToken(accessToken));
 
-  return accessToken ? (
-    <div>
-      <h1>Logged in!</h1>
-      <button onClick={signOut}>Sign out</button>
-      <p>{accessToken}</p>
-    </div>
-  ) : (
-    <button onClick={login}>Sign in to GitHub</button>
-  );
-  // );
+  let octokit;
+  if (accessToken) {
+    octokit = Octokit({
+      auth: accessToken,
+      userAgent: 'get-the-gist v1.0.0',
+      log: console,
+    });
+  }
+
+  const handleLogin = e => {
+    e.preventDefault();
+    setLoading(true);
+    login()
+      .then(token => {
+        setAccessToken(token);
+        setLoading(false);
+      })
+      .catch(error => console.error(error));
+  };
+
+  console.log({ accessToken });
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  } else {
+    return (
+      <div className="wrapper">
+        {accessToken ? (
+          <div>
+            <h1>Logged in!</h1>
+            <div>
+              <button onClick={signOut(setAccessToken)}>Sign out</button>
+              <button onClick={() => getCodeBlocks(setCodeBlocks, setError)}>
+                Get code blocks
+              </button>
+            </div>
+            {error && <p>{error}</p>}
+            {codeBlocks ? (
+              <List>
+                {codeBlocks.map(block => (
+                  <ListItem>
+                    <Gist
+                      code={block}
+                      onCreateClick={(fileName, code) => event => {
+                        event.preventDefault();
+                        setupCreateGist(octokit)({
+                          [fileName]: { content: code },
+                        });
+                      }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            ) : null}
+          </div>
+        ) : (
+          <button onClick={handleLogin}>Sign in to GitHub</button>
+        )}
+      </div>
+    );
+  }
 };
 
 // Inject our app into the DOM

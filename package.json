@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel src/popup.js -d src/build -o popup.js",
-    "build": "parcel build src/popup.js -d src/build -o popup.js --no-minify"
+    "build": "parcel build src/popup.js -d build -o popup.js --no-minify"
   },
   "dependencies": {
     "@babel/plugin-syntax-async-generators": "^7.2.0",
