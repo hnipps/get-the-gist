@@ -1,11 +1,9 @@
 require('dotenv').config();
 
 import { h, render } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
-import { login } from './oauth';
-import { getCodeBlocks } from './get-code-blocks';
-import { setupCreateGist } from './create-gist';
-import Gist from './components/Gist';
+import { useState } from 'preact/hooks';
+import { login, getCodeBlocks, setupCreateGist } from './utils';
+import Gist from './components/gist/Gist';
 import List from './components/list/List';
 import ListItem from './components/list/components/ListItem';
 
@@ -45,7 +43,24 @@ const App = () => {
       .catch(error => console.error(error));
   };
 
-  console.log({ accessToken });
+  const handleCreateGistClick = codeBlock => {
+    return (fileName, code) => event => {
+      event.preventDefault();
+
+      setupCreateGist(octokit)({
+        [fileName]: { content: code },
+      }).then(({ data: { html_url: url } }) => {
+        const updatedGist = { ...codeBlock, url };
+        const filteredCodeBlocks = codeBlocks.filter(
+          item => item.id !== codeBlock.id,
+        );
+        const updatedCodeBlocks = [...filteredCodeBlocks, updatedGist].sort(
+          (a, b) => a.order - b.order,
+        );
+        setCodeBlocks(updatedCodeBlocks);
+      });
+    };
+  };
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -64,16 +79,12 @@ const App = () => {
             {error && <p>{error}</p>}
             {codeBlocks ? (
               <List>
-                {codeBlocks.map(block => (
+                {codeBlocks.map(codeBlock => (
                   <ListItem>
                     <Gist
-                      code={block}
-                      onCreateClick={(fileName, code) => event => {
-                        event.preventDefault();
-                        setupCreateGist(octokit)({
-                          [fileName]: { content: code },
-                        });
-                      }}
+                      code={codeBlock.code}
+                      url={codeBlock.url}
+                      onCreateClick={handleCreateGistClick(codeBlock)}
                     />
                   </ListItem>
                 ))}

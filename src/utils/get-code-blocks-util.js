@@ -10,11 +10,11 @@
       { combined: [], temp: [] },
     );
 
-  return myArray.combined.map(combined =>
-    combined.reduce(
+  return myArray.combined.map(combined => ({
+    code: combined.reduce(
       (acc, el) =>
         acc !== '' ? acc + '\\n\\n' + el.innerText : acc + el.innerText,
       '',
     ),
-  );
+  }));
 })();

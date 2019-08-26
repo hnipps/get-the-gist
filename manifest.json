@@ -1,6 +1,6 @@
 {
   "name": "Get the Gist",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Easily convert Medium.com code blocks into Gists!",
   "permissions": [
     "storage",
@@ -10,11 +10,11 @@
     "https://github.com/login/oauth/access_token"
   ],
   "background": {
-    "scripts": ["src/background.js"],
+    "scripts": ["background.js"],
     "persistent": false
   },
   "page_action": {
-    "default_popup": "build/popup.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "images/eject-16.png",
       "32": "images/eject-32.png",
