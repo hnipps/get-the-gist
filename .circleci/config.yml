@@ -8,9 +8,9 @@ jobs:
     docker:
       # specify the version you desire here
       - image: ubuntu:16.04
-      
-      environment: 
-      APP_ID: obmhgdnggnljdlbbohnllgbecbbghedl
+    
+    environment: 
+      - APP_ID: obmhgdnggnljdlbbohnllgbecbbghedl
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
