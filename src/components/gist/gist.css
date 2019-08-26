@@ -1,0 +1,15 @@
+.gist__copy-button {
+  margin-left: 0.25rem;
+  background: lightgray;
+  border-radius: 50%;
+  border: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.25rem;
+  vertical-align: middle;
+}
+
+.gist__copy-button:hover {
+  color: white;
+  background: gray;
+}

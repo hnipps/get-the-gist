@@ -1,7 +1,11 @@
 import { Fragment, h } from 'preact';
+import copy from 'copy-to-clipboard';
+
 import { useState, useCallback } from 'preact/hooks';
 import { FontAwesomeIcon } from '@aduh95/preact-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
+
+import './gist.css';
 
 const Gist = ({ code, onCreateClick, url }) => {
   const [fileName, setFileName] = useState();
@@ -23,19 +27,12 @@ const Gist = ({ code, onCreateClick, url }) => {
       {url && (
         <p>
           {url}
-          <button onClick={() => document.execCommand('copy', false, url)}>
-            <FontAwesomeIcon
-              style={{
-                marginLeft: '0.5rem',
-                background: 'lightgray',
-                borderRadius: '50%',
-                width: '1rem',
-                height: '1rem',
-                padding: '0.25rem',
-                verticalAlign: 'middle',
-              }}
-              icon={faCopy}
-            />
+          <button
+            title="Copy to clipboard."
+            className="gist__copy-button"
+            onClick={() => copy(url)}
+          >
+            <FontAwesomeIcon icon={faCopy} />
           </button>
         </p>
       )}

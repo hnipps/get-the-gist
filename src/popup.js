@@ -3,7 +3,7 @@ require('dotenv').config();
 import { h, render } from 'preact';
 import { useState } from 'preact/hooks';
 import { login, getCodeBlocks, setupCreateGist } from './utils';
-import Gist from './components/Gist';
+import Gist from './components/gist/Gist';
 import List from './components/list/List';
 import ListItem from './components/list/components/ListItem';
 
