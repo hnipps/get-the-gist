@@ -10,7 +10,7 @@ export const login = () =>
   new Promise((resolve, error) =>
     chrome.identity.launchWebAuthFlow(
       {
-        url: `https://github.com/login/oauth/authorize?scope=user%20email%20gist&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`,
+        url: `https://github.com/login/oauth/authorize?scope=gist&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`,
         interactive: true,
       },
       url => {
