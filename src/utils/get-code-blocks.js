@@ -1,3 +1,5 @@
+import uuidv1 from 'uuid/v1';
+
 export const getCodeBlocks = (setCodeBlocks, setError) => {
   setError(undefined);
   chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
@@ -15,23 +17,26 @@ export const getCodeBlocks = (setCodeBlocks, setError) => {
                   : { combined: [...combined, [...temp, item]], temp: [] },
               { combined: [], temp: [] },
             );
-      
-          return myArray.combined
-            .map(item => {
-              return item;
-            })
-            .map(combined =>
-              combined.reduce(
-                (acc, el) =>
-                  acc !== '' ? acc + '\\n\\n' + el.innerText : acc + el.innerText,
-                '',
-              ),
-            );
-        })();`,
+        
+          return myArray.combined.map(combined => ({
+            code: combined.reduce(
+              (acc, el) =>
+                acc !== '' ? acc + '\\n\\n' + el.innerText : acc + el.innerText,
+              '',
+            ),
+          }));
+        })();
+        `,
       },
       res => {
         res[0].length > 0
-          ? setCodeBlocks(res[0])
+          ? setCodeBlocks(
+              res[0].map((codeBlock, i) => ({
+                ...codeBlock,
+                id: uuidv1(),
+                order: i,
+              })),
+            )
           : setError('No code blocks found!');
       },
     );
