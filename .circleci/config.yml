@@ -10,7 +10,7 @@ jobs:
       - image: ubuntu:16.04
 
     environment:
-      - APP_ID: obmhgdnggnljdlbbohnllgbecbbghedl
+      - APP_ID: efaekpejcfjpejdjhkolhlnpepimjcio
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -24,17 +24,23 @@ jobs:
           name: 'Install Dependencies'
           command: |
             apt-get update
-            apt-get -y install curl jq yarn
+            apt-get -y install curl jq apt-transport-https zip
+            curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            apt-get install -y nodejs
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+            apt-get update && apt-get -y install yarn
+            yarn install
             # You can also install Yarn, NPM, or anything else you need to use to build and test your extension.
-      
+
       - run:
           name: 'Run Tests'
           command: echo "Run any tests here."
-      
+
       - run:
           name: 'Build Extension'
           command: yarn run build
-      
+
       - run:
           name: 'Package Extension'
           command: zip -r get-the-gist.zip build
@@ -44,6 +50,6 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
-              curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T pointless.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
+              curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T get-the-gist.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
               curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
             fi
