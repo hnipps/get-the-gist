@@ -51,10 +51,13 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
               UPLOAD_STATE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T get-the-gist.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}" | jq -r .uploadState)
-              echo "[Chrome Extension upload state: $UPLOAD_STATE]"
               if [ "$UPLOAD_STATE" == "FAILURE" ]; then
-                echo "Error [Chrome Extension upload state: $UPLOAD_STATE]"
+                echo "Error. Unable to upload. [Chrome Extension upload state: $UPLOAD_STATE]"
                 exit 1
               fi
-              curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
+              PUBLISH_STATE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish" | jq -r .status)
+              if ["$PUBLISH_STATE" != "OK"]; then
+                echo "Error. Unable to publish. [Chrome Extension publish state: $PUBLISH_STATE]"
+                exit 1
+              fi
             fi
