@@ -5,8 +5,9 @@
   "author": "Harry Nicholls <harry.m.nicholls@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel build src/popup.js -d build -o popup.js --no-minify",
-    "build": "parcel build src/popup.js -d build -o popup.js && cp -R images src/background.js manifest.json src/popup.html build/"
+    "copy": "cp -R images src/background.js manifest.json src/popup.html build/",
+    "dev": "parcel build src/popup.js -d build -o popup.js --no-minify && yarn run copy",
+    "build": "parcel build src/popup.js -d build -o popup.js && yarn run copy"
   },
   "dependencies": {
     "@babel/plugin-syntax-async-generators": "^7.2.0",
