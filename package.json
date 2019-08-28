@@ -1,13 +1,16 @@
 {
   "name": "gistify",
-  "version": "1.0.0",
+  "version": "0.0.6",
   "main": "index.js",
   "author": "Harry Nicholls <harry.m.nicholls@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "copy": "cp -R images src/background.js manifest.json src/popup.html build/",
-    "dev": "parcel build src/popup.js -d build -o popup.js --no-minify && yarn run copy",
-    "build": "parcel build src/popup.js -d build -o popup.js && yarn run copy"
+    "copy": "cp -R images manifest.json src/popup.html build/",
+    "copy:build-local": "yarn run copy && cp .env.local build/.env",
+    "dev": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy",
+    "build": "parcel build src/popup.js src/background.js -d build --no-content-hash && yarn run copy",
+    "build:local": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy:build-local",
+    "package": "rm get-the-gist.zip && zip -r get-the-gist.zip build"
   },
   "dependencies": {
     "@aduh95/preact-fontawesome": "^0.1.4",

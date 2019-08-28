@@ -2,7 +2,7 @@ require('dotenv').config();
 
 import { h, render } from 'preact';
 import { useState } from 'preact/hooks';
-import { login, getCodeBlocks, setupCreateGist } from './utils';
+import { getCodeBlocks, setupCreateGist } from './utils';
 import Gist from './components/gist/Gist';
 import List from './components/list/List';
 import ListItem from './components/list/components/ListItem';
@@ -10,8 +10,6 @@ import ListItem from './components/list/components/ListItem';
 import './popup.css';
 
 const Octokit = require('@octokit/rest');
-
-const loadData = (key, callback) => chrome.storage.local.get([key], callback);
 
 const signOut = setAccessToken => () =>
   chrome.storage.local.remove('accessToken', () => setAccessToken(undefined));
@@ -21,7 +19,9 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [codeBlocks, setCodeBlocks] = useState();
   const [error, setError] = useState();
-  loadData('accessToken', ({ accessToken }) => setAccessToken(accessToken));
+  chrome.storage.local.get('accessToken', ({ accessToken }) =>
+    setAccessToken(accessToken),
+  );
 
   let octokit;
   if (accessToken) {
@@ -35,12 +35,13 @@ const App = () => {
   const handleLogin = e => {
     e.preventDefault();
     setLoading(true);
-    login()
-      .then(token => {
-        setAccessToken(token);
-        setLoading(false);
-      })
-      .catch(error => console.error(error));
+
+    var port = chrome.runtime.connect({ name: 'login' });
+    port.postMessage({ action: 'login' });
+    port.onMessage.addListener(function(msg) {
+      console.log('Logged in!', msg);
+      setLoading(false);
+    });
   };
 
   const handleCreateGistClick = codeBlock => {
