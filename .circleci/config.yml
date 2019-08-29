@@ -63,6 +63,8 @@ jobs:
               ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
               UPLOAD_RESPONSE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T get-the-gist.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}")
               UPLOAD_STATE=$(echo "$UPLOAD_RESPONSE" | jq -r .uploadState)
+              UPLOAD_ERRORS=$(echo "$UPLOAD_RESPONSE" | jq -r [.itemError[]])
+              echo "$UPLOAD_ERRORS"
               if [ "${UPLOAD_STATE}" == "FAILURE" ]; then
                 echo "ERROR. Unable to upload. [Chrome Extension upload state: ${UPLOAD_STATE}]"
                 echo "$UPLOAD_RESPONSE"
@@ -74,7 +76,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "Publishing..."
               PUBLISH_RESPONSE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish")
-              PUBLISH_STATE=$(echo "$PUBLISH_RESPONSE" | jq -r .status)
+              PUBLISH_STATE=$(echo "$PUBLISH_RESPONSE" | jq -r [.status[]])
               if [ "${PUBLISH_STATE}" != "OK" ]; then
                 echo "ERROR. Unable to publish. [Chrome Extension publish state: ${PUBLISH_STATE}]"
                 echo "$PUBLISH_RESPONSE"
@@ -86,7 +88,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "staging" ]; then
               echo "Publishing to staging..."
               PUBLISH_RESPONSE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -H "publishTarget: trustedTesters" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish" | jq -r .status)
-              PUBLISH_STATE=$(echo "$PUBLISH_RESPONSE" | jq -r .status)
+              PUBLISH_STATE=$(echo "$PUBLISH_RESPONSE" | jq -r [.status[]])
               if [ "${PUBLISH_STATE}" != "OK" ]; then
                 echo "ERROR. Unable to publish. [Chrome Extension publish state: ${PUBLISH_STATE}]"
                 echo "$PUBLISH_RESPONSE"
