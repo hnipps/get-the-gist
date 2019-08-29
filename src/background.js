@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import { login } from './utils';
 
 chrome.runtime.onInstalled.addListener(function() {

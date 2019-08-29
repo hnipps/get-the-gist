@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 import { h, render } from 'preact';
 import { useState } from 'preact/hooks';
 import { getCodeBlocks, setupCreateGist } from './utils';
