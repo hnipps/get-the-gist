@@ -1,6 +1,6 @@
 {
   "name": "Get the Gist",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Easily convert Medium.com code blocks into Gists!",
   "permissions": [
     "storage",
