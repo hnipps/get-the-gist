@@ -67,7 +67,6 @@ jobs:
                 exit 1
               fi
             fi
-
             # If branch is master then publish the app to the Chrome Web Store
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               PUBLISH_STATE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish" | jq -r .status)
@@ -76,7 +75,6 @@ jobs:
                 exit 1
               fi
             fi
-
             # If branch is staging then publish the app for testers only
             if [ "${CIRCLE_BRANCH}" == "staging" ]; then
               PUBLISH_STATE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -H "publishTarget: trustedTesters" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish" | jq -r .status)
