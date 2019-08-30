@@ -20,11 +20,9 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.runtime.onConnect.addListener(function(port) {
   console.assert(port.name == 'login');
   port.onMessage.addListener(function(msg) {
-    console.log(msg);
     if (msg.action == 'login') {
       login()
         .then(token => {
-          console.log('Setting token...', token);
           port.postMessage({ token });
         })
         .catch(error => console.error(error));

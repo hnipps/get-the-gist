@@ -37,7 +37,6 @@ const App = () => {
     var port = chrome.runtime.connect({ name: 'login' });
     port.postMessage({ action: 'login' });
     port.onMessage.addListener(function(msg) {
-      console.log('Logged in!', msg);
       setLoading(false);
     });
   };
