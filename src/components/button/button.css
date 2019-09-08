@@ -1,8 +1,32 @@
 @import '../../styles/variables.css';
 
 .button {
+  position: relative;
   padding: 0.5rem 0.75rem;
   border: none;
   border-radius: 0.5rem;
   background: var(--color-blue);
+}
+
+.button:hover,
+.button--loading {
+  background: var(--color-dark-blue);
+}
+
+.button--loading:after {
+  content: '';
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0.5rem;
+}
+
+.button__loading-spinner {
+  position: absolute;
+  top: calc(50% - 0.5rem);
+  left: calc(50% - 0.5rem);
+  z-index: 10;
 }

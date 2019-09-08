@@ -61,41 +61,37 @@ const App = () => {
     };
   };
 
-  if (loading) {
-    return <h1>Loading...</h1>;
-  } else {
-    return (
-      <main className="wrapper">
-        {accessToken ? (
+  return (
+    <main className="wrapper">
+      {accessToken ? (
+        <div>
+          <h1>Logged in!</h1>
           <div>
-            <h1>Logged in!</h1>
-            <div>
-              <button onClick={signOut(setAccessToken)}>Sign out</button>
-              <button onClick={() => getCodeBlocks(setCodeBlocks, setError)}>
-                Get code blocks
-              </button>
-            </div>
-            {error && <p>{error}</p>}
-            {codeBlocks ? (
-              <List>
-                {codeBlocks.map(codeBlock => (
-                  <ListItem>
-                    <Gist
-                      code={codeBlock.code}
-                      url={codeBlock.url}
-                      onCreateClick={handleCreateGistClick(codeBlock)}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            ) : null}
+            <button onClick={signOut(setAccessToken)}>Sign out</button>
+            <button onClick={() => getCodeBlocks(setCodeBlocks, setError)}>
+              Get code blocks
+            </button>
           </div>
-        ) : (
-          <Login onLogin={handleLogin} />
-        )}
-      </main>
-    );
-  }
+          {error && <p>{error}</p>}
+          {codeBlocks ? (
+            <List>
+              {codeBlocks.map(codeBlock => (
+                <ListItem>
+                  <Gist
+                    code={codeBlock.code}
+                    url={codeBlock.url}
+                    onCreateClick={handleCreateGistClick(codeBlock)}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          ) : null}
+        </div>
+      ) : (
+        <Login onLogin={handleLogin} loading={loading} />
+      )}
+    </main>
+  );
 };
 
 // Inject our app into the DOM
