@@ -6,6 +6,7 @@ import List from './components/list/List';
 import ListItem from './components/list/components/ListItem';
 
 import './popup.css';
+import Login from './components/login/Login';
 
 const Octokit = require('@octokit/rest');
 
@@ -64,7 +65,7 @@ const App = () => {
     return <h1>Loading...</h1>;
   } else {
     return (
-      <div className="wrapper">
+      <main className="wrapper">
         {accessToken ? (
           <div>
             <h1>Logged in!</h1>
@@ -90,9 +91,9 @@ const App = () => {
             ) : null}
           </div>
         ) : (
-          <button onClick={handleLogin}>Sign in to GitHub</button>
+          <Login onLogin={handleLogin} />
         )}
-      </div>
+      </main>
     );
   }
 };
