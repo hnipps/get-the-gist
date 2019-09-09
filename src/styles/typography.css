@@ -6,7 +6,7 @@
 }
 
 .label {
-  color: #fff;
+  color: var(--color-white);
   font-family: 'Lato', sans-serif;
   font-size: 0.75rem;
   line-height: 1.5;

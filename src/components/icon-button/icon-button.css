@@ -1,0 +1,14 @@
+@import '../../styles/variables.css';
+
+.icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  background: var(--color-dark-gray);
+  font-size: 1.25rem;
+  color: var(--color-white);
+}

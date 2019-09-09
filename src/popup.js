@@ -7,6 +7,7 @@ import ListItem from './components/list/components/ListItem';
 
 import './popup.css';
 import Login from './components/login/Login';
+import Header from './components/header/Header';
 
 const Octokit = require('@octokit/rest');
 
@@ -62,10 +63,10 @@ const App = () => {
   };
 
   return (
-    <main className="wrapper">
+    <main className="popup__wrapper">
       {accessToken ? (
-        <div>
-          <h1>Logged in!</h1>
+        <div className="popup__main-content-wrapper">
+          <Header />
           <div>
             <button onClick={signOut(setAccessToken)}>Sign out</button>
             <button onClick={() => getCodeBlocks(setCodeBlocks, setError)}>
