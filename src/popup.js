@@ -16,7 +16,8 @@ const signOut = setAccessToken => () =>
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(undefined);
-  const [loading, setLoading] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [codeBlocks, setCodeBlocks] = useState();
   const [error, setError] = useState();
   chrome.storage.local.get('accessToken', ({ accessToken }) =>
@@ -34,12 +35,12 @@ const App = () => {
 
   const handleLogin = e => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoggingIn(true);
 
     var port = chrome.runtime.connect({ name: 'login' });
     port.postMessage({ action: 'login' });
     port.onMessage.addListener(function(msg) {
-      setLoading(false);
+      setIsLoggingIn(false);
     });
   };
 
@@ -62,16 +63,22 @@ const App = () => {
     };
   };
 
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    getCodeBlocks(setCodeBlocks, setError).then(() => {
+      console.log('Stop refreshing!');
+
+      setIsRefreshing(false);
+    });
+  };
+
   return (
     <main className="popup__wrapper">
       {accessToken ? (
         <div className="popup__main-content-wrapper">
-          <Header />
+          <Header onRefresh={handleRefresh} loading={isRefreshing} />
           <div>
             <button onClick={signOut(setAccessToken)}>Sign out</button>
-            <button onClick={() => getCodeBlocks(setCodeBlocks, setError)}>
-              Get code blocks
-            </button>
           </div>
           {error && <p>{error}</p>}
           {codeBlocks ? (
@@ -89,7 +96,7 @@ const App = () => {
           ) : null}
         </div>
       ) : (
-        <Login onLogin={handleLogin} loading={loading} />
+        <Login onLogin={handleLogin} loading={isLoggingIn} />
       )}
     </main>
   );

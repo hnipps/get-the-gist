@@ -6,13 +6,18 @@ import Heading from '../heading/Heading';
 
 import './header.css';
 
-const Header = () => {
+const Header = ({ onRefresh, loading }) => {
   return (
     <header className="header">
       <Heading element="h1" className="h1">
         Your Snippets
       </Heading>
-      <IconButton icon={faSyncAlt} />
+      <IconButton
+        icon={faSyncAlt}
+        variant="primary"
+        onClick={onRefresh}
+        loading={loading}
+      />
     </header>
   );
 };

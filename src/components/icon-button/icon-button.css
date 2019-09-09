@@ -1,4 +1,5 @@
 @import '../../styles/variables.css';
+@import '../../styles/animation.css';
 
 .icon-button {
   display: flex;
@@ -8,7 +9,24 @@
   border-radius: 50%;
   width: 2rem;
   height: 2rem;
-  background: var(--color-dark-gray);
   font-size: 1.25rem;
+}
+
+.icon-button:active {
+  outline: none;
+}
+
+.icon-button--primary {
   color: var(--color-white);
+  background: var(--color-blue);
+}
+
+.icon-button--primary:hover {
+  background: var(--color-dark-blue);
+}
+
+.icon-button--loading,
+.icon-button--loading:hover {
+  animation: spin 10s linear infinite;
+  background: var(--color-green);
 }
