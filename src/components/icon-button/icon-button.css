@@ -30,3 +30,17 @@
   animation: spin 10s linear infinite;
   background: var(--color-green);
 }
+
+.icon-button--secondary {
+  color: var(--color-white);
+  background: var(--color-dark-gray);
+}
+
+.icon-button--secondary:hover {
+  background: var(--color-blue);
+}
+
+.icon-button--secondary:focus {
+  outline: none;
+  border: 2px solid var(--color-blue);
+}

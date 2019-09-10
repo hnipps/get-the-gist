@@ -2,13 +2,19 @@ import { h } from 'preact';
 import { FontAwesomeIcon } from '@aduh95/preact-fontawesome';
 
 import './icon-button.css';
+import { combineClasses } from '../utils/combine-classes';
 
-const IconButton = ({ icon, variant, loading, ...props }) => {
+const IconButton = ({ icon, variant, loading, className, ...props }) => {
+  const variantClass = variant ? `icon-button--${variant}` : '';
+  const loadingClass = loading ? 'icon-button--loading' : '';
   return (
     <button
-      className={`icon-button ${variant ? `icon-button--${variant}` : ''} ${
-        loading ? 'icon-button--loading' : ''
-      }`}
+      className={combineClasses(
+        'icon-button',
+        variantClass,
+        loadingClass,
+        className,
+      )}
       disabled={loading}
       {...props}
     >

@@ -1,6 +1,8 @@
-import { h } from 'preact';
+import { h, Fragment } from 'preact';
 import { useState, useCallback } from 'preact/hooks';
 import TextField from '../text-field/TextField';
+import { faPlus, faCheck } from '@fortawesome/free-solid-svg-icons';
+import ToggleButton from '../toggle-button/ToggleButton';
 
 import './create-gist-form.css';
 
@@ -14,15 +16,34 @@ const CreateGistForm = ({ onCreateClick, code }) => {
     ev => setFileName(ev.target.value),
     [setFileName],
   );
+  const preventAccordionDefault = ev => {
+    ev.stopPropagation();
+    ev.preventDefault();
+  };
   return (
-    <form className="create-gist-form" onSubmit={submitForm}>
-      <TextField
-        placeholder="Enter a file name..."
-        value={fileName}
-        onChange={handleTextFieldChange}
-        className="create-gist-form__text-field"
+    <span className="create-gist-form__wrapper">
+      <form className="create-gist-form" onSubmit={submitForm}>
+        <TextField
+          placeholder="Enter a file name..."
+          value={fileName}
+          onChange={handleTextFieldChange}
+          onClick={preventAccordionDefault}
+          className="create-gist-form__text-field"
+        />
+      </form>
+      <ToggleButton
+        icon={{ off: faPlus, on: faCheck }}
+        variant="secondary"
+        onClick={ev => {
+          preventAccordionDefault(ev);
+          console.log('Button clicked!');
+        }}
+        classes={{
+          on: 'create-gist-form__button--on',
+          off: 'create-gist-form__button--off',
+        }}
       />
-    </form>
+    </span>
   );
 };
 

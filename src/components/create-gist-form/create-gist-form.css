@@ -1,7 +1,17 @@
+.create-gist-form__wrapper {
+  display: inline-flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
 .create-gist-form {
   display: inline-block;
 }
 
 .create-gist-form__text-field {
   width: 16rem;
+}
+
+.create-gist-form__button--on {
+  background: var(--color-green);
 }
