@@ -1,0 +1,7 @@
+.create-gist-form {
+  display: inline-block;
+}
+
+.create-gist-form__text-field {
+  width: 16rem;
+}

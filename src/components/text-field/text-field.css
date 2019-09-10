@@ -1,0 +1,13 @@
+.text-field {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  border-bottom: 0.25rem solid var(--color-dark-gray);
+  font-size: 0.75rem;
+  line-height: 1.3333;
+}
+
+.text-field:focus {
+  outline: none;
+  border-color: var(--color-blue);
+}

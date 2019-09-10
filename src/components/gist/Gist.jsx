@@ -7,23 +7,10 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons';
 
 import './gist.css';
 
-const Gist = ({ code, onCreateClick, url }) => {
-  const [fileName, setFileName] = useState();
-  const submitForm = useCallback(onCreateClick(fileName, code), [
-    fileName,
-    code,
-  ]);
+const Gist = ({ code, url }) => {
   return (
     <>
-      <pre>{code}</pre>
-      <form onSubmit={submitForm}>
-        <input
-          placeholder="Enter a file name..."
-          value={fileName}
-          onChange={ev => setFileName(ev.target.value)}
-        />
-        <input type="submit">Create Gist</input>
-      </form>
+      <pre className="gist__code">{code}</pre>
       {url && (
         <p>
           {url}

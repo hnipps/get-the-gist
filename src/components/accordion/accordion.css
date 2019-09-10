@@ -1,0 +1,20 @@
+.accordion__header {
+  display: flex;
+  align-items: center;
+  background: var(--color-light-gray);
+  padding: 0.5rem 0.75rem;
+}
+
+.accordion__content {
+  background: var(--color-dark-gray);
+  color: var(--color-white);
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+}
+
+.accordion__icon-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  margin-right: 0.75rem;
+  font-size: 1rem;
+}

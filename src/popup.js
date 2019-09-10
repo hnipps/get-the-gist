@@ -8,6 +8,8 @@ import ListItem from './components/list/components/ListItem';
 import './popup.css';
 import Login from './components/login/Login';
 import Header from './components/header/Header';
+import Accordion from './components/accordion/Accordion';
+import CreateGistForm from './components/create-gist-form/CreateGistForm';
 
 const Octokit = require('@octokit/rest');
 
@@ -20,6 +22,9 @@ const App = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [codeBlocks, setCodeBlocks] = useState();
   const [error, setError] = useState();
+  const [snippetListStatus, setSnippetListStatus] = useState(
+    'No snippets found.',
+  );
   chrome.storage.local.get('accessToken', ({ accessToken }) =>
     setAccessToken(accessToken),
   );
@@ -45,11 +50,11 @@ const App = () => {
   };
 
   const handleCreateGistClick = codeBlock => {
-    return (fileName, code) => event => {
+    return fileName => event => {
       event.preventDefault();
 
       setupCreateGist(octokit)({
-        [fileName]: { content: code },
+        [fileName]: { content: codeBlock.code },
       }).then(({ data: { html_url: url } }) => {
         const updatedGist = { ...codeBlock, url };
         const filteredCodeBlocks = codeBlocks.filter(
@@ -65,6 +70,7 @@ const App = () => {
 
   const handleRefresh = () => {
     setIsRefreshing(true);
+    setSnippetListStatus('Looking for code snippets...');
     getCodeBlocks(setCodeBlocks, setError).then(() => {
       console.log('Stop refreshing!');
 
@@ -77,23 +83,26 @@ const App = () => {
       {accessToken ? (
         <div className="popup__main-content-wrapper">
           <Header onRefresh={handleRefresh} loading={isRefreshing} />
-          <div>
-            <button onClick={signOut(setAccessToken)}>Sign out</button>
-          </div>
           {error && <p>{error}</p>}
-          {codeBlocks ? (
-            <List>
-              {codeBlocks.map(codeBlock => (
+          <List>
+            {codeBlocks ? (
+              codeBlocks.map(codeBlock => (
                 <ListItem>
-                  <Gist
-                    code={codeBlock.code}
-                    url={codeBlock.url}
-                    onCreateClick={handleCreateGistClick(codeBlock)}
-                  />
+                  <Accordion
+                    header={
+                      <CreateGistForm
+                        onCreateClick={handleCreateGistClick(codeBlock)}
+                      />
+                    }
+                  >
+                    <Gist code={codeBlock.code} url={codeBlock.url} />
+                  </Accordion>
                 </ListItem>
-              ))}
-            </List>
-          ) : null}
+              ))
+            ) : (
+              <ListItem>{snippetListStatus}</ListItem>
+            )}
+          </List>
         </div>
       ) : (
         <Login onLogin={handleLogin} loading={isLoggingIn} />

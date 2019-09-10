@@ -1,4 +1,3 @@
 .list-item {
-  border-top: solid 1px lightgray;
-  padding: 0.25rem 0;
+  border-top: solid 1px var(--color-gray);
 }
