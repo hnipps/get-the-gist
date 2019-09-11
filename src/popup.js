@@ -1,5 +1,5 @@
 import { h, render, Fragment } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useCallback } from 'preact/hooks';
 import { getCodeBlocks, setupCreateGist } from './utils';
 import Gist from './components/gist/Gist';
 import List from './components/list/List';
@@ -21,12 +21,13 @@ const App = () => {
   const [accessToken, setAccessToken] = useState(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [codeBlocks, setCodeBlocks] = useState();
+  const [snippetList, setSnippetList] = useState();
   const [error, setError] = useState();
   const [snippetListStatus, setSnippetListStatus] = useState(
     'No snippets found.',
   );
   const [selectedSnippets, setSelectedSnippets] = useState([]);
+  const [gistDescription, setGistDescription] = useState();
   chrome.storage.local.get('accessToken', ({ accessToken }) =>
     setAccessToken(accessToken),
   );
@@ -51,29 +52,30 @@ const App = () => {
     });
   };
 
-  const handleCreateGistClick = codeBlock => {
-    return fileName => event => {
-      event.preventDefault();
+  const handleCreateGistClick = (snippets, description) => event => {
+    event.preventDefault();
 
-      setupCreateGist(octokit)({
-        [fileName]: { content: codeBlock.code },
-      }).then(({ data: { html_url: url } }) => {
-        const updatedGist = { ...codeBlock, url };
-        const filteredCodeBlocks = codeBlocks.filter(
-          item => item.id !== codeBlock.id,
-        );
-        const updatedCodeBlocks = [...filteredCodeBlocks, updatedGist].sort(
-          (a, b) => a.order - b.order,
-        );
-        setCodeBlocks(updatedCodeBlocks);
-      });
-    };
+    const files = snippets.reduce(
+      (acc, { filename, code }, i) => ({
+        ...acc,
+        [filename || `file${i}`]: { content: code },
+      }),
+      {},
+    );
+
+    console.log(files);
+
+    setupCreateGist(octokit)(files, description).then(
+      ({ data: { html_url: url } }) => {
+        console.log(url);
+      },
+    );
   };
 
   const handleRefresh = () => {
     setIsRefreshing(true);
     setSnippetListStatus('Looking for code snippets...');
-    getCodeBlocks(setCodeBlocks, setError).then(() => {
+    getCodeBlocks(setSnippetList, setError).then(() => {
       console.log('Stop refreshing!');
 
       setIsRefreshing(false);
@@ -97,6 +99,19 @@ const App = () => {
     setSelectedSnippets(newSelectedSnippets);
   };
 
+  const handleGistDescriptionChange = useCallback(ev =>
+    setGistDescription(ev.target.value),
+  );
+
+  const handleSnippetFilenameChange = codeBlock =>
+    useCallback(ev => {
+      const newSnippets = [
+        ...snippetList.filter(block => block.id !== codeBlock.id),
+        { ...codeBlock, filename: ev.target.value },
+      ].sort((a, b) => a.order - b.order);
+      setSnippetList(newSnippets);
+    });
+
   return (
     <main className="popup__wrapper">
       {accessToken ? (
@@ -104,16 +119,19 @@ const App = () => {
           <Header onRefresh={handleRefresh} loading={isRefreshing} />
           {error && <p>{error}</p>}
           <List>
-            {codeBlocks ? (
+            {snippetList ? (
               <>
-                {codeBlocks.map(codeBlock => (
+                {snippetList.map(codeBlock => (
                   <ListItem>
                     <Accordion
                       header={
                         <CreateGistForm
-                          onCreateClick={handleCreateGistClick(codeBlock)}
                           onAddSnippetClick={handleAddSnippet(codeBlock)}
                           onRemoveSnippetClick={handleRemoveSnippet(codeBlock)}
+                          onFilenameChange={handleSnippetFilenameChange(
+                            codeBlock,
+                          )}
+                          filename={codeBlock.filename}
                         />
                       }
                     >
@@ -122,7 +140,14 @@ const App = () => {
                   </ListItem>
                 ))}
                 <ListItem>
-                  <Footer snippetCount={selectedSnippets.length} />
+                  <Footer
+                    snippetCount={selectedSnippets.length}
+                    onCreateGist={handleCreateGistClick(
+                      selectedSnippets,
+                      gistDescription,
+                    )}
+                    onGistDescriptionChange={handleGistDescriptionChange}
+                  />
                 </ListItem>
               </>
             ) : (
