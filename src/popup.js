@@ -1,15 +1,16 @@
-import { h, render } from 'preact';
+import { h, render, Fragment } from 'preact';
 import { useState } from 'preact/hooks';
 import { getCodeBlocks, setupCreateGist } from './utils';
 import Gist from './components/gist/Gist';
 import List from './components/list/List';
 import ListItem from './components/list/components/ListItem';
-
-import './popup.css';
 import Login from './components/login/Login';
 import Header from './components/header/Header';
 import Accordion from './components/accordion/Accordion';
 import CreateGistForm from './components/create-gist-form/CreateGistForm';
+import Footer from './components/footer/footer';
+
+import './popup.css';
 
 const Octokit = require('@octokit/rest');
 
@@ -25,6 +26,7 @@ const App = () => {
   const [snippetListStatus, setSnippetListStatus] = useState(
     'No snippets found.',
   );
+  const [selectedSnippets, setSelectedSnippets] = useState([]);
   chrome.storage.local.get('accessToken', ({ accessToken }) =>
     setAccessToken(accessToken),
   );
@@ -78,6 +80,23 @@ const App = () => {
     });
   };
 
+  const handleAddSnippet = codeBlock => () => {
+    console.log('Adding!');
+    const newSelectedSnippets = [...selectedSnippets, codeBlock].sort(
+      (a, b) => a.order - b.order,
+    );
+    setSelectedSnippets(newSelectedSnippets);
+  };
+
+  const handleRemoveSnippet = codeBlock => () => {
+    console.log('Removing!');
+
+    const newSelectedSnippets = selectedSnippets
+      .filter(snip => snip.id !== codeBlock.id)
+      .sort((a, b) => a.order - b.order);
+    setSelectedSnippets(newSelectedSnippets);
+  };
+
   return (
     <main className="popup__wrapper">
       {accessToken ? (
@@ -86,19 +105,26 @@ const App = () => {
           {error && <p>{error}</p>}
           <List>
             {codeBlocks ? (
-              codeBlocks.map(codeBlock => (
+              <>
+                {codeBlocks.map(codeBlock => (
+                  <ListItem>
+                    <Accordion
+                      header={
+                        <CreateGistForm
+                          onCreateClick={handleCreateGistClick(codeBlock)}
+                          onAddSnippetClick={handleAddSnippet(codeBlock)}
+                          onRemoveSnippetClick={handleRemoveSnippet(codeBlock)}
+                        />
+                      }
+                    >
+                      <Gist code={codeBlock.code} url={codeBlock.url} />
+                    </Accordion>
+                  </ListItem>
+                ))}
                 <ListItem>
-                  <Accordion
-                    header={
-                      <CreateGistForm
-                        onCreateClick={handleCreateGistClick(codeBlock)}
-                      />
-                    }
-                  >
-                    <Gist code={codeBlock.code} url={codeBlock.url} />
-                  </Accordion>
+                  <Footer snippetCount={selectedSnippets.length} />
                 </ListItem>
-              ))
+              </>
             ) : (
               <ListItem>{snippetListStatus}</ListItem>
             )}

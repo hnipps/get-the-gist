@@ -1,10 +1,14 @@
+:root {
+  --text-field-border-width: 3px;
+}
+
 .text-field {
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem calc(0.5rem - var(--text-field-border-width));
   border-radius: 0.5rem;
   border: none;
-  border-bottom: 0.25rem solid var(--color-dark-gray);
+  border-bottom: var(--text-field-border-width) solid var(--color-dark-gray);
   font-size: 0.75rem;
-  line-height: 1.3333;
+  line-height: 1rem;
 }
 
 .text-field:focus {

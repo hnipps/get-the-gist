@@ -6,7 +6,7 @@ import ToggleButton from '../toggle-button/ToggleButton';
 
 import './create-gist-form.css';
 
-const CreateGistForm = ({ onCreateClick, code }) => {
+const CreateGistForm = ({ code, onAddSnippetClick, onRemoveSnippetClick }) => {
   const [fileName, setFileName] = useState();
   const submitForm = useCallback(onCreateClick(fileName, code), [
     fileName,
@@ -34,9 +34,15 @@ const CreateGistForm = ({ onCreateClick, code }) => {
       <ToggleButton
         icon={{ off: faPlus, on: faCheck }}
         variant="secondary"
-        onClick={ev => {
-          preventAccordionDefault(ev);
-          console.log('Button clicked!');
+        onClick={{
+          on: ev => {
+            preventAccordionDefault(ev);
+            onRemoveSnippetClick(ev);
+          },
+          off: ev => {
+            preventAccordionDefault(ev);
+            onAddSnippetClick(ev);
+          },
         }}
         classes={{
           on: 'create-gist-form__button--on',

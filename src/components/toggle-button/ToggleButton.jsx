@@ -5,16 +5,16 @@ import IconButton from '../icon-button/IconButton';
 const ToggleButton = ({
   icon: { on: onIcon, off: offIcon },
   classes: { on: onClass, off: offClass },
-  onClick,
+  onClick: { on: onOnClick, off: offOnClick },
   ...props
 }) => {
   const [isOn, setIsOnState] = useState(false);
   const handleClick = useCallback(
     ev => {
-      onClick(ev);
+      isOn ? onOnClick(ev) : offOnClick(ev);
       setIsOnState(!isOn);
     },
-    [isOn, setIsOnState],
+    [isOn, onOnClick, offOnClick, setIsOnState],
   );
   return (
     <IconButton
