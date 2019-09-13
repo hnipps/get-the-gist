@@ -14,16 +14,16 @@ const Footer = ({
   return (
     <section className="footer">
       {snippetCount} {snippetsString} selected.
-      <span>
+      <form onSubmit={onCreateGist}>
         <TextField
           className="footer__text-field"
           placeholder="Gist description..."
           onChange={onGistDescriptionChange}
         />
-        <Button variant="primary" onClick={onCreateGist} loading={loading}>
+        <Button type="submit" variant="primary" loading={loading}>
           Create Gist
         </Button>
-      </span>
+      </form>
     </section>
   );
 };

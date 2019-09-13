@@ -14,6 +14,7 @@ import './popup.css';
 import Overlay from './components/overlay/Overlay';
 import Dialog from './components/dialog/Dialog';
 import CopyToClipboard from './components/copy-to-clipboard/CopyToClipboard';
+import Heading from './components/heading/Heading';
 
 const Octokit = require('@octokit/rest');
 
@@ -59,6 +60,8 @@ const App = () => {
   };
 
   const handleCreateGistClick = (snippets, description) => event => {
+    console.log('Creating gist...');
+    
     event.preventDefault();
 
     const files = snippets.reduce(
@@ -127,41 +130,43 @@ const App = () => {
           {error && <p>{error}</p>}
           <List>
             {snippetList ? (
-              <>
-                {snippetList.map(codeBlock => (
-                  <ListItem>
-                    <Accordion
-                      header={
-                        <GistItemForm
-                          onAddSnippetClick={handleAddSnippet(codeBlock)}
-                          onRemoveSnippetClick={handleRemoveSnippet(codeBlock)}
-                          onFilenameChange={handleSnippetFilenameChange(
-                            codeBlock,
-                          )}
-                          filename={codeBlock.filename}
-                        />
-                      }
-                    >
-                      <Gist code={codeBlock.code} url={codeBlock.url} />
-                    </Accordion>
-                  </ListItem>
-                ))}
+              snippetList.map(codeBlock => (
                 <ListItem>
-                  <Footer
-                    snippetCount={selectedSnippets.length}
-                    onCreateGist={handleCreateGistClick(
-                      selectedSnippets,
-                      gistDescription,
-                    )}
-                    onGistDescriptionChange={handleGistDescriptionChange}
-                    loading={isCreatingGist}
-                  />
+                  <Accordion
+                    header={
+                      <GistItemForm
+                        onAddSnippetClick={handleAddSnippet(codeBlock)}
+                        onRemoveSnippetClick={handleRemoveSnippet(codeBlock)}
+                        onFilenameChange={handleSnippetFilenameChange(
+                          codeBlock,
+                        )}
+                        filename={codeBlock.filename}
+                      />
+                    }
+                  >
+                    <Gist code={codeBlock.code} url={codeBlock.url} />
+                  </Accordion>
                 </ListItem>
-              </>
+              ))
             ) : (
-              <ListItem>{snippetListStatus}</ListItem>
+              <ListItem className="snippet-status__list-item">
+                <Heading element="p" className="h4">
+                  {snippetListStatus}
+                </Heading>
+              </ListItem>
             )}
           </List>
+          {snippetList ? (
+            <Footer
+              snippetCount={selectedSnippets.length}
+              onCreateGist={handleCreateGistClick(
+                selectedSnippets,
+                gistDescription,
+              )}
+              onGistDescriptionChange={handleGistDescriptionChange}
+              loading={isCreatingGist}
+            />
+          ) : null}
         </div>
       ) : (
         <Login onLogin={handleLogin} loading={isLoggingIn} />
