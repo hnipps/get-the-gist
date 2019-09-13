@@ -1,0 +1,30 @@
+@import '../../styles/variables.css';
+
+.dialog {
+  --dialog-width: 28rem;
+  background: var(--color-gray);
+  width: var(--dialog-width);
+  position: absolute;
+  top: 33%;
+  left: calc(50% - var(--dialog-width) / 2);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px 0 var(--color-black);
+}
+
+.dialog__header {
+  background: var(--color-dark-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.dialog__heading {
+  color: var(--color-white);
+}
+
+.dialog__content {
+  background: var(--color-light-gray);
+  padding: 0.5rem;
+}

@@ -4,3 +4,4 @@ scripts
 build
 *.zip
 .env*
+ux_research

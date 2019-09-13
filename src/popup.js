@@ -1,11 +1,20 @@
-import { h, render } from 'preact';
-import { useState } from 'preact/hooks';
+import { h, render, Fragment } from 'preact';
+import { useState, useCallback } from 'preact/hooks';
 import { getCodeBlocks, setupCreateGist } from './utils';
 import Gist from './components/gist/Gist';
 import List from './components/list/List';
 import ListItem from './components/list/components/ListItem';
+import Login from './components/login/Login';
+import Header from './components/header/Header';
+import Accordion from './components/accordion/Accordion';
+import GistItemForm from './components/create-gist-form/CreateGistForm';
+import Footer from './components/footer/footer';
 
 import './popup.css';
+import Overlay from './components/overlay/Overlay';
+import Dialog from './components/dialog/Dialog';
+import CopyToClipboard from './components/copy-to-clipboard/CopyToClipboard';
+import Heading from './components/heading/Heading';
 
 const Octokit = require('@octokit/rest');
 
@@ -14,9 +23,18 @@ const signOut = setAccessToken => () =>
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(undefined);
-  const [loading, setLoading] = useState(false);
-  const [codeBlocks, setCodeBlocks] = useState();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [snippetList, setSnippetList] = useState();
   const [error, setError] = useState();
+  const [snippetListStatus, setSnippetListStatus] = useState(
+    'No snippets found.',
+  );
+  const [selectedSnippets, setSelectedSnippets] = useState([]);
+  const [gistDescription, setGistDescription] = useState();
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [lastGistUrl, setLastGistUrl] = useState();
+  const [isCreatingGist, setIsCreatingGist] = useState(false);
   chrome.storage.local.get('accessToken', ({ accessToken }) =>
     setAccessToken(accessToken),
   );
@@ -32,69 +50,136 @@ const App = () => {
 
   const handleLogin = e => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoggingIn(true);
 
     var port = chrome.runtime.connect({ name: 'login' });
     port.postMessage({ action: 'login' });
     port.onMessage.addListener(function(msg) {
-      setLoading(false);
+      setIsLoggingIn(false);
     });
   };
 
-  const handleCreateGistClick = codeBlock => {
-    return (fileName, code) => event => {
-      event.preventDefault();
+  const handleCreateGistClick = (snippets, description) => event => {
+    console.log('Creating gist...');
+    
+    event.preventDefault();
 
-      setupCreateGist(octokit)({
-        [fileName]: { content: code },
-      }).then(({ data: { html_url: url } }) => {
-        const updatedGist = { ...codeBlock, url };
-        const filteredCodeBlocks = codeBlocks.filter(
-          item => item.id !== codeBlock.id,
-        );
-        const updatedCodeBlocks = [...filteredCodeBlocks, updatedGist].sort(
-          (a, b) => a.order - b.order,
-        );
-        setCodeBlocks(updatedCodeBlocks);
-      });
-    };
+    const files = snippets.reduce(
+      (acc, { filename, code }, i) => ({
+        ...acc,
+        [filename || `file${i}`]: { content: code },
+      }),
+      {},
+    );
+
+    setIsCreatingGist(true);
+    setupCreateGist(octokit)(files, description).then(
+      ({ data: { html_url: url } }) => {
+        setIsCreatingGist(false);
+        setLastGistUrl(url);
+        setShowOverlay(true);
+      },
+    );
   };
 
-  if (loading) {
-    return <h1>Loading...</h1>;
-  } else {
-    return (
-      <div className="wrapper">
-        {accessToken ? (
-          <div>
-            <h1>Logged in!</h1>
-            <div>
-              <button onClick={signOut(setAccessToken)}>Sign out</button>
-              <button onClick={() => getCodeBlocks(setCodeBlocks, setError)}>
-                Get code blocks
-              </button>
-            </div>
-            {error && <p>{error}</p>}
-            {codeBlocks ? (
-              <List>
-                {codeBlocks.map(codeBlock => (
-                  <ListItem>
-                    <Gist
-                      code={codeBlock.code}
-                      url={codeBlock.url}
-                      onCreateClick={handleCreateGistClick(codeBlock)}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            ) : null}
-          </div>
-        ) : (
-          <button onClick={handleLogin}>Sign in to GitHub</button>
-        )}
-      </div>
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setSnippetListStatus('Looking for code snippets...');
+    getCodeBlocks(setSnippetList, setError).then(() => {
+      console.log('Stop refreshing!');
+
+      setIsRefreshing(false);
+    });
+  };
+
+  const handleAddSnippet = codeBlock => () => {
+    console.log('Adding!');
+    const newSelectedSnippets = [...selectedSnippets, codeBlock].sort(
+      (a, b) => a.order - b.order,
     );
-  }
+    setSelectedSnippets(newSelectedSnippets);
+  };
+
+  const handleRemoveSnippet = codeBlock => () => {
+    console.log('Removing!');
+
+    const newSelectedSnippets = selectedSnippets
+      .filter(snip => snip.id !== codeBlock.id)
+      .sort((a, b) => a.order - b.order);
+    setSelectedSnippets(newSelectedSnippets);
+  };
+
+  const handleGistDescriptionChange = useCallback(ev =>
+    setGistDescription(ev.target.value),
+  );
+
+  const handleSnippetFilenameChange = codeBlock =>
+    useCallback(ev => {
+      const newSnippets = [
+        ...snippetList.filter(block => block.id !== codeBlock.id),
+        { ...codeBlock, filename: ev.target.value },
+      ].sort((a, b) => a.order - b.order);
+      setSnippetList(newSnippets);
+    });
+
+  return (
+    <main className="popup__wrapper">
+      {accessToken ? (
+        <div className="popup__main-content-wrapper">
+          <Header onRefresh={handleRefresh} loading={isRefreshing} />
+          {error && <p>{error}</p>}
+          <List>
+            {snippetList ? (
+              snippetList.map(codeBlock => (
+                <ListItem>
+                  <Accordion
+                    header={
+                      <GistItemForm
+                        onAddSnippetClick={handleAddSnippet(codeBlock)}
+                        onRemoveSnippetClick={handleRemoveSnippet(codeBlock)}
+                        onFilenameChange={handleSnippetFilenameChange(
+                          codeBlock,
+                        )}
+                        filename={codeBlock.filename}
+                      />
+                    }
+                  >
+                    <Gist code={codeBlock.code} url={codeBlock.url} />
+                  </Accordion>
+                </ListItem>
+              ))
+            ) : (
+              <ListItem className="snippet-status__list-item">
+                <Heading element="p" className="h4">
+                  {snippetListStatus}
+                </Heading>
+              </ListItem>
+            )}
+          </List>
+          {snippetList ? (
+            <Footer
+              snippetCount={selectedSnippets.length}
+              onCreateGist={handleCreateGistClick(
+                selectedSnippets,
+                gistDescription,
+              )}
+              onGistDescriptionChange={handleGistDescriptionChange}
+              loading={isCreatingGist}
+            />
+          ) : null}
+        </div>
+      ) : (
+        <Login onLogin={handleLogin} loading={isLoggingIn} />
+      )}
+      {showOverlay ? (
+        <Overlay>
+          <Dialog title="Gist Created." onDismiss={() => setShowOverlay(false)}>
+            <CopyToClipboard value={lastGistUrl} />
+          </Dialog>
+        </Overlay>
+      ) : null}
+    </main>
+  );
 };
 
 // Inject our app into the DOM

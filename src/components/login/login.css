@@ -1,0 +1,14 @@
+.login__wrapper {
+  width: 17.0625rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.login__heading {
+  display: inline-block;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+
+.login__button {
+  vertical-align: middle;
+}

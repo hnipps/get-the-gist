@@ -1,6 +1,6 @@
 {
   "name": "gistify",
-  "version": "0.0.12",
+  "version": "1.0.0",
   "main": "index.js",
   "author": "Harry Nicholls <harry.m.nicholls@gmail.com>",
   "license": "MIT",
