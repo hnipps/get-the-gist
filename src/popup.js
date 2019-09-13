@@ -7,10 +7,13 @@ import ListItem from './components/list/components/ListItem';
 import Login from './components/login/Login';
 import Header from './components/header/Header';
 import Accordion from './components/accordion/Accordion';
-import CreateGistForm from './components/create-gist-form/CreateGistForm';
+import GistItemForm from './components/create-gist-form/CreateGistForm';
 import Footer from './components/footer/footer';
 
 import './popup.css';
+import Overlay from './components/overlay/Overlay';
+import Dialog from './components/dialog/Dialog';
+import CopyToClipboard from './components/copy-to-clipboard/CopyToClipboard';
 
 const Octokit = require('@octokit/rest');
 
@@ -28,6 +31,9 @@ const App = () => {
   );
   const [selectedSnippets, setSelectedSnippets] = useState([]);
   const [gistDescription, setGistDescription] = useState();
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [lastGistUrl, setLastGistUrl] = useState();
+  const [isCreatingGist, setIsCreatingGist] = useState(false);
   chrome.storage.local.get('accessToken', ({ accessToken }) =>
     setAccessToken(accessToken),
   );
@@ -63,11 +69,12 @@ const App = () => {
       {},
     );
 
-    console.log(files);
-
+    setIsCreatingGist(true);
     setupCreateGist(octokit)(files, description).then(
       ({ data: { html_url: url } }) => {
-        console.log(url);
+        setIsCreatingGist(false);
+        setLastGistUrl(url);
+        setShowOverlay(true);
       },
     );
   };
@@ -125,7 +132,7 @@ const App = () => {
                   <ListItem>
                     <Accordion
                       header={
-                        <CreateGistForm
+                        <GistItemForm
                           onAddSnippetClick={handleAddSnippet(codeBlock)}
                           onRemoveSnippetClick={handleRemoveSnippet(codeBlock)}
                           onFilenameChange={handleSnippetFilenameChange(
@@ -147,6 +154,7 @@ const App = () => {
                       gistDescription,
                     )}
                     onGistDescriptionChange={handleGistDescriptionChange}
+                    loading={isCreatingGist}
                   />
                 </ListItem>
               </>
@@ -158,6 +166,13 @@ const App = () => {
       ) : (
         <Login onLogin={handleLogin} loading={isLoggingIn} />
       )}
+      {showOverlay ? (
+        <Overlay>
+          <Dialog title="Gist Created." onDismiss={() => setShowOverlay(false)}>
+            <CopyToClipboard value={lastGistUrl} />
+          </Dialog>
+        </Overlay>
+      ) : null}
     </main>
   );
 };

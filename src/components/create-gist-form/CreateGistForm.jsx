@@ -6,7 +6,7 @@ import ToggleButton from '../toggle-button/ToggleButton';
 
 import './create-gist-form.css';
 
-const CreateGistForm = ({
+const GistItemForm = ({
   onAddSnippetClick,
   onRemoveSnippetClick,
   onFilenameChange,
@@ -47,4 +47,4 @@ const CreateGistForm = ({
   );
 };
 
-export default CreateGistForm;
+export default GistItemForm;

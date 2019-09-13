@@ -3,6 +3,16 @@
   font-size: 1.5rem;
   line-height: 1.3333;
   margin: 0;
+  letter-spacing: -0.05em;
+}
+
+.h4 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+  font-weight: bold;
+  letter-spacing: -0.05em;
+  margin: 0;
+  line-height: 1.25;
 }
 
 .label {
