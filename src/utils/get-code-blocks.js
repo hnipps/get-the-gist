@@ -1,8 +1,7 @@
 import uuidv1 from 'uuid/v1';
 
-export const getCodeBlocks = (setCodeBlocks, setError) =>
+export const getCodeBlocks = setCodeBlocks =>
   new Promise((resolve, err) => {
-    setError(undefined);
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
       chrome.tabs.executeScript(
         tabs[0].id,
@@ -42,8 +41,7 @@ export const getCodeBlocks = (setCodeBlocks, setError) =>
                 );
               })()
             : (() => {
-                setError('No code blocks found!');
-                err('No code blocks found!');
+                err('No snippets found.');
               })();
         },
       );
