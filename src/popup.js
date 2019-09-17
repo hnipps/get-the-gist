@@ -26,7 +26,6 @@ const App = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [snippetList, setSnippetList] = useState();
-  const [error, setError] = useState();
   const [snippetListStatus, setSnippetListStatus] = useState(
     'No snippets found.',
   );
@@ -61,7 +60,7 @@ const App = () => {
 
   const handleCreateGistClick = (snippets, description) => event => {
     console.log('Creating gist...');
-    
+
     event.preventDefault();
 
     const files = snippets.reduce(
@@ -85,11 +84,14 @@ const App = () => {
   const handleRefresh = () => {
     setIsRefreshing(true);
     setSnippetListStatus('Looking for code snippets...');
-    getCodeBlocks(setSnippetList, setError).then(() => {
-      console.log('Stop refreshing!');
-
-      setIsRefreshing(false);
-    });
+    getCodeBlocks(setSnippetList)
+      .then(() => {
+        setIsRefreshing(false);
+      })
+      .catch(() => {
+        setIsRefreshing(false);
+        setSnippetListStatus('No snippets found.');
+      });
   };
 
   const handleAddSnippet = codeBlock => () => {
@@ -127,7 +129,6 @@ const App = () => {
       {accessToken ? (
         <div className="popup__main-content-wrapper">
           <Header onRefresh={handleRefresh} loading={isRefreshing} />
-          {error && <p>{error}</p>}
           <List>
             {snippetList ? (
               snippetList.map(codeBlock => (
