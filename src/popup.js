@@ -8,7 +8,7 @@ import Login from './components/login/Login';
 import Header from './components/header/Header';
 import Accordion from './components/accordion/Accordion';
 import GistItemForm from './components/create-gist-form/CreateGistForm';
-import Footer from './components/footer/footer';
+import Footer from './components/footer/Footer';
 
 import './popup.css';
 import Overlay from './components/overlay/Overlay';
