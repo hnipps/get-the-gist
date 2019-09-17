@@ -48,9 +48,9 @@ jobs:
       - run:
           name: 'Build Extension'
           command: |
+            echo "GITHUB_CLIENT_ID="$CLIENT_ID >> .env
+            echo "GITHUB_CLIENT_SECRET="$CLIENT_SECRET >> .env
             yarn run build
-            echo "GITHUB_CLIENT_ID="$CLIENT_ID >> build/.env
-            echo "GITHUB_CLIENT_SECRET="$CLIENT_SECRET >> build/.env
 
       - run:
           name: 'Package Extension'
