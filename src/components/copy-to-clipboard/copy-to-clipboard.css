@@ -1,0 +1,33 @@
+.copy-to-clipboard {
+  display: flex;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.copy-to-clipboard__input {
+  padding: 0.5rem;
+  margin: 0;
+  border: none;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+  font-family: 'Lato', sans-serif;
+  line-height: 1.5;
+}
+
+.copy-to-clipboard__button {
+  border: none;
+  padding: 6px 10px;
+  margin: 0;
+  font-size: 1.25rem;
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+.copy-to-clipboard__button:hover {
+  background: var(--color-dark-blue);
+}
+
+.copy-to-clipboard__button:active {
+  background: var(--color-green);
+}

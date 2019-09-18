@@ -1,0 +1,57 @@
+@import '../../styles/variables.css';
+@import '../../styles/animation.css';
+
+.icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.25rem;
+  padding: 0;
+}
+
+.icon-button:active {
+  outline: none;
+}
+
+.icon-button--primary {
+  color: var(--color-white);
+  background: var(--color-blue);
+}
+
+.icon-button--primary:hover {
+  background: var(--color-dark-blue);
+}
+
+.icon-button--loading,
+.icon-button--loading:hover {
+  animation: spin 10s linear infinite;
+  background: var(--color-green);
+}
+
+.icon-button--secondary {
+  color: var(--color-white);
+  background: var(--color-dark-gray);
+}
+
+.icon-button--secondary:hover {
+  background: var(--color-blue);
+}
+
+.icon-button--secondary:focus {
+  outline: none;
+  border: 2px solid var(--color-blue);
+}
+
+.icon-button--tertiary {
+  --icon-button-tertiary-width: 1rem;
+  background: none;
+  width: var(--icon-button-tertiary-width);
+  height: var(--icon-button-tertiary-width);
+  color: var(--color-white);
+  /* TODO: set font-size in order to change icon size */
+  font-size: var(--icon-button-tertiary-width);
+}

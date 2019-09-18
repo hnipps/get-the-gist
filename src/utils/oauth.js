@@ -4,8 +4,6 @@ const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const REDIRECT_URI = chrome.identity.getRedirectURL();
 
-console.log(CLIENT_ID, CLIENT_SECRET);
-
 export const login = () =>
   new Promise((resolve, error) =>
     chrome.identity.launchWebAuthFlow(
@@ -14,9 +12,6 @@ export const login = () =>
         interactive: true,
       },
       url => {
-        console.log(chrome.identity.getRedirectURL());
-        console.log(url);
-
         const {
           query: { code },
         } = queryString.parseUrl(url);

@@ -13,3 +13,7 @@
   color: white;
   background: gray;
 }
+
+.gist__code {
+  margin: 0;
+}

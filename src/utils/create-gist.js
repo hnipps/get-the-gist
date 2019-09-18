@@ -1,4 +1,5 @@
-export const setupCreateGist = octokit => files =>
+export const setupCreateGist = octokit => (files, description) =>
   octokit.gists.create({
     files,
+    description,
   });
