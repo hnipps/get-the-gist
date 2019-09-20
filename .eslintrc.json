@@ -1,9 +1,13 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "amd": true,
+        "webextensions": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "prettier"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -16,8 +20,9 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "prettier"
     ],
     "rules": {
+        "prettier/prettier": "error"
     }
 }

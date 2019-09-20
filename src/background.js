@@ -1,6 +1,6 @@
-require('dotenv').config();
+require("dotenv").config();
 
-import { login } from './utils';
+import { login } from "./utils";
 
 chrome.runtime.onInstalled.addListener(function() {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
@@ -8,24 +8,23 @@ chrome.runtime.onInstalled.addListener(function() {
       {
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: 'medium.com' },
-          }),
+            pageUrl: { hostEquals: "medium.com" }
+          })
         ],
-        actions: [new chrome.declarativeContent.ShowPageAction()],
-      },
+        actions: [new chrome.declarativeContent.ShowPageAction()]
+      }
     ]);
   });
 });
 
 chrome.runtime.onConnect.addListener(function(port) {
-  console.assert(port.name == 'login');
   port.onMessage.addListener(function(msg) {
-    if (msg.action == 'login') {
+    if (msg.action == "login") {
       login()
         .then(token => {
           port.postMessage({ token });
         })
-        .catch(error => console.error(error));
+        .catch(error => new Error(error));
     }
   });
 });
