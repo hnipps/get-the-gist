@@ -1,6 +1,6 @@
-import { h } from 'preact';
+import { h } from "preact";
 
-import './list-item.css';
+import "./list-item.css";
 
 const ListItem = ({ children, ...props }) => {
   return (

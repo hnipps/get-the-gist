@@ -1,4 +1,4 @@
-import uuidv1 from 'uuid/v1';
+import uuidv1 from "uuid/v1";
 
 export const getCodeBlocks = setCodeBlocks =>
   new Promise((resolve, err) => {
@@ -26,7 +26,7 @@ export const getCodeBlocks = setCodeBlocks =>
             ),
           }));
         })();
-        `,
+        `
         },
         res => {
           res[0].length > 0
@@ -36,14 +36,14 @@ export const getCodeBlocks = setCodeBlocks =>
                   res[0].map((codeBlock, i) => ({
                     ...codeBlock,
                     id: uuidv1(),
-                    order: i,
-                  })),
+                    order: i
+                  }))
                 );
               })()
             : (() => {
-                err('No snippets found.');
+                err("No snippets found.");
               })();
-        },
+        }
       );
     });
   });

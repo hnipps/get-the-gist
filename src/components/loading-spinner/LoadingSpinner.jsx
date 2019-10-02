@@ -1,6 +1,6 @@
-import { h } from 'preact';
+import { h } from "preact";
 
-import './loading-spinner.css';
+import "./loading-spinner.css";
 
 const LoadingSpinner = ({ className }) => {
   return (

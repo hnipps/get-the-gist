@@ -1,10 +1,10 @@
-import { h, Fragment } from 'preact';
-import { useState, useCallback } from 'preact/hooks';
-import TextField from '../text-field/TextField';
-import { faPlus, faCheck } from '@fortawesome/free-solid-svg-icons';
-import ToggleButton from '../toggle-button/ToggleButton';
+import { h, Fragment } from "preact";
+import { useState, useCallback } from "preact/hooks";
+import TextField from "../text-field/TextField";
+import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
+import ToggleButton from "../toggle-button/ToggleButton";
 
-import './create-gist-form.css';
+import "./create-gist-form.css";
 
 const GistItemForm = ({
   onAddSnippetClick,
@@ -36,11 +36,11 @@ const GistItemForm = ({
           off: ev => {
             preventAccordionDefault(ev);
             onAddSnippetClick(ev);
-          },
+          }
         }}
         classes={{
-          on: 'create-gist-form__button--on',
-          off: 'create-gist-form__button--off',
+          on: "create-gist-form__button--on",
+          off: "create-gist-form__button--off"
         }}
       />
     </span>

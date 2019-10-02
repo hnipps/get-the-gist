@@ -1,19 +1,19 @@
-import { h } from 'preact';
-import { FontAwesomeIcon } from '@aduh95/preact-fontawesome';
+import { h } from "preact";
+import { FontAwesomeIcon } from "@aduh95/preact-fontawesome";
 
-import './icon-button.css';
-import { combineClasses } from '../utils/combine-classes';
+import "./icon-button.css";
+import { combineClasses } from "../utils/combine-classes";
 
 const IconButton = ({ icon, variant, loading, className, ...props }) => {
-  const variantClass = variant ? `icon-button--${variant}` : '';
-  const loadingClass = loading ? 'icon-button--loading' : '';
+  const variantClass = variant ? `icon-button--${variant}` : "";
+  const loadingClass = loading ? "icon-button--loading" : "";
   return (
     <button
       className={combineClasses(
-        'icon-button',
+        "icon-button",
         variantClass,
         loadingClass,
-        className,
+        className
       )}
       disabled={loading}
       {...props}
