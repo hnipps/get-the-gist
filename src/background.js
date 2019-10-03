@@ -1,6 +1,8 @@
 require("dotenv").config();
 
-import { login } from "./utils";
+import { login, loginCode$ } from "./utils";
+import { requestAccessToken, accessToken$ } from "./utils/request-access-token";
+import { take } from "rxjs/operators";
 
 chrome.runtime.onInstalled.addListener(function() {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
@@ -20,11 +22,12 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.runtime.onConnect.addListener(function(port) {
   port.onMessage.addListener(function(msg) {
     if (msg.action == "login") {
-      login()
-        .then(token => {
-          port.postMessage({ token });
-        })
-        .catch(error => new Error(error));
+      loginCode$.pipe(take(1)).subscribe(code => requestAccessToken(code));
+      accessToken$.pipe(take(1)).subscribe(accessToken => {
+        chrome.storage.local.set({ accessToken });
+        port.postMessage({ accessToken });
+      });
+      login();
     }
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "gistify",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "index.js",
   "author": "Harry Nicholls <harry.m.nicholls@gmail.com>",
   "license": "MIT",
@@ -10,7 +10,8 @@
     "dev": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy",
     "build": "parcel build src/popup.js src/background.js -d build --no-content-hash && yarn run copy",
     "build:local": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy:build-local",
-    "package": "rm -f get-the-gist.zip && zip -r get-the-gist.zip build"
+    "package": "rm -f get-the-gist.zip && zip -r get-the-gist.zip build",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@aduh95/preact-fontawesome": "^0.1.4",
@@ -28,9 +29,12 @@
     "@babel/core": "^7.5.5",
     "@babel/plugin-syntax-async-generators": "^7.2.0",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.6.2",
     "eslint": "^6.4.0",
     "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-jest": "^22.17.0",
     "eslint-plugin-prettier": "^3.1.1",
+    "jest": "^24.9.0",
     "parcel-bundler": "^1.12.3",
     "prettier": "^1.18.2"
   }
