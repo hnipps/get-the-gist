@@ -1,6 +1,6 @@
 import { CLIENT_ID, REDIRECT_URI } from "./constants";
 import { Subject } from "rxjs";
-const queryString = require("query-string");
+import { extractOAuthCode } from "./extract-oauth-code";
 
 const loginCode = new Subject();
 export const loginCode$ = loginCode.asObservable();
@@ -12,9 +12,7 @@ export const login = () =>
       interactive: true
     },
     url => {
-      const {
-        query: { code }
-      } = queryString.parseUrl(url);
+      const code = extractOAuthCode(url);
       loginCode.next(code);
     }
   );
