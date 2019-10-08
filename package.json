@@ -11,7 +11,7 @@
     "build": "parcel build src/popup.js src/background.js -d build --no-content-hash && yarn run copy",
     "build:local": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy:build-local",
     "package": "rm -f get-the-gist.zip && zip -r get-the-gist.zip build",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "dependencies": {
     "@aduh95/preact-fontawesome": "^0.1.4",
