@@ -12,7 +12,7 @@ export const getCodeBlocks = setCodeBlocks =>
             .map((_, i) => document.getElementsByTagName('pre').item(i))
             .reduce(
               ({ combined, temp }, item) =>
-                item.nextElementSibling.tagName.toLowerCase() === 'pre'
+              item.nextElementSibling && item.nextElementSibling.tagName.toLowerCase() === 'pre'
                   ? { combined: [...combined], temp: [...temp, item] }
                   : { combined: [...combined, [...temp, item]], temp: [] },
               { combined: [], temp: [] },
