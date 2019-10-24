@@ -1,6 +1,6 @@
 import { h, render } from "preact";
 import { useState, useCallback } from "preact/hooks";
-import { getCodeBlocks, setupCreateGist } from "./utils";
+import { setupCreateGist } from "./utils";
 import Gist from "./components/gist/Gist";
 import List from "./components/list/List";
 import ListItem from "./components/list/components/ListItem";
@@ -33,6 +33,10 @@ const App = () => {
   const [isCreatingGist, setIsCreatingGist] = useState(false);
   chrome.storage.local.get("accessToken", ({ accessToken }) =>
     setAccessToken(accessToken)
+  );
+
+  chrome.storage.local.get("codeSnippets", ({ codeSnippets }) =>
+    setSnippetList(codeSnippets)
   );
 
   let octokit;
@@ -77,14 +81,11 @@ const App = () => {
   const handleRefresh = () => {
     setIsRefreshing(true);
     setSnippetListStatus("Looking for code snippets...");
-    getCodeBlocks(setSnippetList)
-      .then(() => {
-        setIsRefreshing(false);
-      })
-      .catch(() => {
-        setIsRefreshing(false);
-        setSnippetListStatus("No snippets found.");
-      });
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs =>
+      chrome.tabs.sendMessage(tabs[0].id, { action: "find_snippets" }, () =>
+        setIsRefreshing(false)
+      )
+    );
   };
 
   const handleAddSnippet = codeBlock => () => {

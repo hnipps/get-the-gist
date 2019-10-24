@@ -18,7 +18,7 @@ describe("reduceInnerText", () => {
 
   it("should concatenate the inner text of the elements", () => {
     expect(reduceInnerText(expectedText[0], preElement2)).toEqual(
-      expectedText[0] + "\\n\\n" + expectedText[1]
+      expectedText[0] + "\n\n" + expectedText[1]
     );
   });
 });
