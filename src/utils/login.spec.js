@@ -10,7 +10,8 @@ global.chrome = {
   identity: {
     launchWebAuthFlow: (_, callback) => {
       callback(MOCK_URL);
-    }
+    },
+    getRedirectURL: () => "http://example.com/redirect"
   }
 };
 

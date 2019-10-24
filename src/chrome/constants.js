@@ -1,1 +1,1 @@
-export const REDIRECT_URI = chrome.identity.getRedirectURL();
+export const getRedirectUri = () => chrome.identity.getRedirectURL();
