@@ -1,12 +1,21 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "amd": true,
+        "webextensions": true,
+        "jest/globals": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "standard-preact",
+        "plugin:jest/recommended",
+        "prettier"
+    ],
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "process": true
     },
     "parserOptions": {
         "ecmaFeatures": {
@@ -16,8 +25,10 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "prettier",
+        "jest"
     ],
     "rules": {
+        "prettier/prettier": "error"
     }
 }

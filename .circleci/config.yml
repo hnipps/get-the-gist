@@ -43,7 +43,7 @@ jobs:
 
       - run:
           name: 'Run Tests'
-          command: echo "Run any tests here."
+          command: yarn test
 
       - run:
           name: 'Build Extension'

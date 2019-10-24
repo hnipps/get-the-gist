@@ -1,15 +1,18 @@
-import { h, Fragment } from 'preact';
-import { useState, useCallback } from 'preact/hooks';
-import { FontAwesomeIcon } from '@aduh95/preact-fontawesome';
-import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { h, Fragment } from "preact";
+import { useState, useCallback } from "preact/hooks";
+import { FontAwesomeIcon } from "@aduh95/preact-fontawesome";
+import {
+  faChevronRight,
+  faChevronDown
+} from "@fortawesome/free-solid-svg-icons";
 
-import './accordion.css';
+import "./accordion.css";
 
 const Accordion = ({ children, header }) => {
   const [isOpen, setIsOpenState] = useState(false);
   const handleHeaderClick = useCallback(() => setIsOpenState(!isOpen), [
     isOpen,
-    setIsOpenState,
+    setIsOpenState
   ]);
   const accordionIcon = isOpen ? faChevronDown : faChevronRight;
 

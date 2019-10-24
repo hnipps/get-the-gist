@@ -1,1 +1,1 @@
-export const combineClasses = (...classNames) => classNames.join(' ').trim();
+export const combineClasses = (...classNames) => classNames.join(" ").trim();

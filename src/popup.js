@@ -1,25 +1,22 @@
-import { h, render, Fragment } from 'preact';
-import { useState, useCallback } from 'preact/hooks';
-import { getCodeBlocks, setupCreateGist } from './utils';
-import Gist from './components/gist/Gist';
-import List from './components/list/List';
-import ListItem from './components/list/components/ListItem';
-import Login from './components/login/Login';
-import Header from './components/header/Header';
-import Accordion from './components/accordion/Accordion';
-import GistItemForm from './components/create-gist-form/CreateGistForm';
-import Footer from './components/footer/Footer';
+import { h, render } from "preact";
+import { useState, useCallback } from "preact/hooks";
+import { getCodeBlocks, setupCreateGist } from "./utils";
+import Gist from "./components/gist/Gist";
+import List from "./components/list/List";
+import ListItem from "./components/list/components/ListItem";
+import Login from "./components/login/Login";
+import Header from "./components/header/Header";
+import Accordion from "./components/accordion/Accordion";
+import GistItemForm from "./components/create-gist-form/CreateGistForm";
+import Footer from "./components/footer/Footer";
 
-import './popup.css';
-import Overlay from './components/overlay/Overlay';
-import Dialog from './components/dialog/Dialog';
-import CopyToClipboard from './components/copy-to-clipboard/CopyToClipboard';
-import Heading from './components/heading/Heading';
+import "./popup.css";
+import Overlay from "./components/overlay/Overlay";
+import Dialog from "./components/dialog/Dialog";
+import CopyToClipboard from "./components/copy-to-clipboard/CopyToClipboard";
+import Heading from "./components/heading/Heading";
 
-const Octokit = require('@octokit/rest');
-
-const signOut = setAccessToken => () =>
-  chrome.storage.local.remove('accessToken', () => setAccessToken(undefined));
+const Octokit = require("@octokit/rest");
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(undefined);
@@ -27,23 +24,23 @@ const App = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [snippetList, setSnippetList] = useState();
   const [snippetListStatus, setSnippetListStatus] = useState(
-    'No snippets found.',
+    "No snippets found."
   );
   const [selectedSnippets, setSelectedSnippets] = useState([]);
   const [gistDescription, setGistDescription] = useState();
   const [showOverlay, setShowOverlay] = useState(false);
   const [lastGistUrl, setLastGistUrl] = useState();
   const [isCreatingGist, setIsCreatingGist] = useState(false);
-  chrome.storage.local.get('accessToken', ({ accessToken }) =>
-    setAccessToken(accessToken),
+  chrome.storage.local.get("accessToken", ({ accessToken }) =>
+    setAccessToken(accessToken)
   );
 
   let octokit;
   if (accessToken) {
     octokit = Octokit({
       auth: accessToken,
-      userAgent: 'get-the-gist v1.0.0',
-      log: console,
+      userAgent: "get-the-gist v1.0.0",
+      log: console
     });
   }
 
@@ -51,24 +48,20 @@ const App = () => {
     e.preventDefault();
     setIsLoggingIn(true);
 
-    var port = chrome.runtime.connect({ name: 'login' });
-    port.postMessage({ action: 'login' });
-    port.onMessage.addListener(function(msg) {
-      setIsLoggingIn(false);
-    });
+    var port = chrome.runtime.connect({ name: "login" });
+    port.postMessage({ action: "login" });
+    port.onMessage.addListener(() => setIsLoggingIn(false));
   };
 
   const handleCreateGistClick = (snippets, description) => event => {
-    console.log('Creating gist...');
-
     event.preventDefault();
 
     const files = snippets.reduce(
       (acc, { filename, code }, i) => ({
         ...acc,
-        [filename || `file${i}`]: { content: code },
+        [filename || `file${i}`]: { content: code }
       }),
-      {},
+      {}
     );
 
     setIsCreatingGist(true);
@@ -77,34 +70,31 @@ const App = () => {
         setIsCreatingGist(false);
         setLastGistUrl(url);
         setShowOverlay(true);
-      },
+      }
     );
   };
 
   const handleRefresh = () => {
     setIsRefreshing(true);
-    setSnippetListStatus('Looking for code snippets...');
+    setSnippetListStatus("Looking for code snippets...");
     getCodeBlocks(setSnippetList)
       .then(() => {
         setIsRefreshing(false);
       })
       .catch(() => {
         setIsRefreshing(false);
-        setSnippetListStatus('No snippets found.');
+        setSnippetListStatus("No snippets found.");
       });
   };
 
   const handleAddSnippet = codeBlock => () => {
-    console.log('Adding!');
     const newSelectedSnippets = [...selectedSnippets, codeBlock].sort(
-      (a, b) => a.order - b.order,
+      (a, b) => a.order - b.order
     );
     setSelectedSnippets(newSelectedSnippets);
   };
 
   const handleRemoveSnippet = codeBlock => () => {
-    console.log('Removing!');
-
     const newSelectedSnippets = selectedSnippets
       .filter(snip => snip.id !== codeBlock.id)
       .sort((a, b) => a.order - b.order);
@@ -112,14 +102,14 @@ const App = () => {
   };
 
   const handleGistDescriptionChange = useCallback(ev =>
-    setGistDescription(ev.target.value),
+    setGistDescription(ev.target.value)
   );
 
   const handleSnippetFilenameChange = codeBlock =>
     useCallback(ev => {
       const newSnippets = [
         ...snippetList.filter(block => block.id !== codeBlock.id),
-        { ...codeBlock, filename: ev.target.value },
+        { ...codeBlock, filename: ev.target.value }
       ].sort((a, b) => a.order - b.order);
       setSnippetList(newSnippets);
     });
@@ -139,7 +129,7 @@ const App = () => {
                         onAddSnippetClick={handleAddSnippet(codeBlock)}
                         onRemoveSnippetClick={handleRemoveSnippet(codeBlock)}
                         onFilenameChange={handleSnippetFilenameChange(
-                          codeBlock,
+                          codeBlock
                         )}
                         filename={codeBlock.filename}
                       />
@@ -162,7 +152,7 @@ const App = () => {
               snippetCount={selectedSnippets.length}
               onCreateGist={handleCreateGistClick(
                 selectedSnippets,
-                gistDescription,
+                gistDescription
               )}
               onGistDescriptionChange={handleGistDescriptionChange}
               loading={isCreatingGist}

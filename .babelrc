@@ -4,8 +4,18 @@
       "@babel/plugin-transform-react-jsx",
       {
         "pragma": "h",
-        "pragmaFrag": "Fragment",
+        "pragmaFrag": "Fragment"
       }
     ]
-  ]
+  ],
+  "presets": [
+    "@babel/preset-env"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "@babel/plugin-transform-runtime"
+      ]
+    }
+  }
 }

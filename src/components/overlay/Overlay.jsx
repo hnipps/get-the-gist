@@ -1,6 +1,6 @@
-import { h } from 'preact';
+import { h } from "preact";
 
-import './overlay.css';
+import "./overlay.css";
 
 const Overlay = ({ children }) => {
   return <div className="overlay">{children}</div>;
