@@ -6,7 +6,7 @@ export const getCodeBlocks = setCodeBlocks =>
       chrome.tabs.executeScript(
         tabs[0].id,
         {
-          file: "scripts/test.js"
+          file: "scripts/example-content-script.js"
         },
         res => {
           console.log(res);
