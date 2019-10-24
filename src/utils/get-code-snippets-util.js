@@ -5,6 +5,8 @@ import { combinePreElements } from "./combine-pre-elements";
 export const getCodeSnippets = () => {
   const myArray = combinePreElements(getPreElements());
 
+  console.log(myArray);
+
   return myArray.combined.map(combined => ({
     code: combined.reduce(reduceInnerText, "")
   }));
