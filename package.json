@@ -9,7 +9,7 @@
     "copy:build-local": "yarn run copy && cp .env.local build/.env",
     "dev": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy",
     "build": "parcel build src/popup.js src/background.js src/scripts/get-code-snippets.js -d build --no-content-hash && yarn run copy",
-    "build:local": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy:build-local",
+    "build:local": "parcel build src/popup.js src/background.js src/scripts/get-code-snippets.js -d build --no-content-hash --no-minify && yarn run copy:build-local",
     "package": "rm -f get-the-gist.zip && zip -r get-the-gist.zip build",
     "test": "jest"
   },

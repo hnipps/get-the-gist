@@ -1,5 +1,5 @@
 import { h, render } from "preact";
-import { useState, useCallback } from "preact/hooks";
+import { useState, useCallback, useEffect } from "preact/hooks";
 import { setupCreateGist } from "./utils";
 import Gist from "./components/gist/Gist";
 import List from "./components/list/List";
@@ -31,13 +31,26 @@ const App = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [lastGistUrl, setLastGistUrl] = useState();
   const [isCreatingGist, setIsCreatingGist] = useState(false);
+  const [currentTab, setCurrentTab] = useState();
+
   chrome.storage.local.get("accessToken", ({ accessToken }) =>
     setAccessToken(accessToken)
   );
 
-  chrome.storage.local.get("codeSnippets", ({ codeSnippets }) =>
-    setSnippetList(codeSnippets)
+  const handleSnippetRetrieval = useCallback(
+    result => {
+      if (typeof currentTab !== "undefined")
+        setSnippetList(result.snippets[currentTab].codeSnippets);
+
+      if (isRefreshing) setIsRefreshing(false);
+    },
+    [currentTab, isRefreshing, setIsRefreshing, setSnippetList]
   );
+
+  const retrieveSnippets = useCallback(() => {
+    chrome.storage.local.get(["snippets"], handleSnippetRetrieval);
+  }, [handleSnippetRetrieval]);
+  useEffect(() => retrieveSnippets(), [retrieveSnippets]);
 
   let octokit;
   if (accessToken) {
@@ -52,41 +65,54 @@ const App = () => {
     e.preventDefault();
     setIsLoggingIn(true);
 
-    var port = chrome.runtime.connect({ name: "login" });
+    const port = chrome.runtime.connect({ name: "login" });
     port.postMessage({ action: "login" });
     port.onMessage.addListener(() => setIsLoggingIn(false));
   };
 
-  const handleCreateGistClick = (snippets, description) => event => {
-    event.preventDefault();
+  const handleCreateGistClick = useCallback(
+    (snippets, description) => event => {
+      event.preventDefault();
 
-    const files = snippets.reduce(
-      (acc, { filename, code }, i) => ({
-        ...acc,
-        [filename || `file${i}`]: { content: code }
+      const files = snippets.reduce(
+        (acc, { filename, code }, i) => ({
+          ...acc,
+          [filename || `file${i}`]: { content: code }
+        }),
+        {}
+      );
+
+      setIsCreatingGist(true);
+      setupCreateGist(octokit)(files, description).then(
+        ({ data: { html_url: url } }) => {
+          setIsCreatingGist(false);
+          setLastGistUrl(url);
+          setShowOverlay(true);
+        }
+      );
+    },
+    [
+      octokit,
+      setIsCreatingGist,
+      setupCreateGist,
+      setLastGistUrl,
+      setShowOverlay
+    ]
+  );
+
+  const findSnippets = useCallback(
+    () =>
+      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "find_snippets" });
       }),
-      {}
-    );
+    []
+  );
 
-    setIsCreatingGist(true);
-    setupCreateGist(octokit)(files, description).then(
-      ({ data: { html_url: url } }) => {
-        setIsCreatingGist(false);
-        setLastGistUrl(url);
-        setShowOverlay(true);
-      }
-    );
-  };
-
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
     setSnippetListStatus("Looking for code snippets...");
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs =>
-      chrome.tabs.sendMessage(tabs[0].id, { action: "find_snippets" }, () =>
-        setIsRefreshing(false)
-      )
-    );
-  };
+    findSnippets();
+  }, [setIsRefreshing, setSnippetListStatus, findSnippets]);
 
   const handleAddSnippet = codeBlock => () => {
     const newSelectedSnippets = [...selectedSnippets, codeBlock].sort(
@@ -114,6 +140,37 @@ const App = () => {
       ].sort((a, b) => a.order - b.order);
       setSnippetList(newSnippets);
     });
+
+  useEffect(
+    () =>
+      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        const url = tabs[0].url;
+        setCurrentTab(url);
+      }),
+    [setCurrentTab]
+  );
+
+  useEffect(
+    () =>
+      chrome.tabs.onUpdated.addListener((_, { url }) => {
+        // Might need to update this to ignore any #paths or URL queries
+        if (url !== currentTab) {
+          handleRefresh();
+          setCurrentTab(url);
+        }
+      }),
+    [handleRefresh, setCurrentTab]
+  );
+
+  useEffect(
+    () =>
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === "local") {
+          handleSnippetRetrieval({ snippets: changes.snippets.newValue });
+        }
+      }),
+    [handleSnippetRetrieval]
+  );
 
   return (
     <main className="popup__wrapper">
