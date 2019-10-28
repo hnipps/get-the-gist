@@ -1,4 +1,15 @@
+// eslint-disable-next-line no-unused-vars
+import uuidv1 from "uuid/v1";
+
 import { getCodeSnippets } from "./get-code-snippets-util";
+
+const MOCK_ID = "unique-id";
+
+jest.mock("uuid/v1", () => {
+  return jest.fn().mockImplementation(() => {
+    return MOCK_ID;
+  });
+});
 
 describe("getCodeBlocks", () => {
   afterEach(() => {
@@ -16,7 +27,9 @@ describe("getCodeBlocks", () => {
           .item(0)
           .appendChild(preElement1);
 
-        expect(getCodeSnippets()).toEqual([{ code: expectedText[0] }]);
+        expect(getCodeSnippets()).toEqual([
+          { code: expectedText[0], order: 0, id: MOCK_ID }
+        ]);
       });
     });
 
@@ -42,7 +55,11 @@ describe("getCodeBlocks", () => {
           .appendChild(div);
 
         expect(getCodeSnippets()).toEqual([
-          { code: expectedText[0] + "\\n\\n" + expectedText[1] }
+          {
+            code: expectedText[0] + "\n\n" + expectedText[1],
+            order: 0,
+            id: MOCK_ID
+          }
         ]);
       });
     });
