@@ -15,7 +15,7 @@ webStore.fetchToken().then(async token => {
       ({ uploadState, ...uploadRes }) => {
         // Response is a Resource Representation
         // https://developer.chrome.com/webstore/webstore_api/items#resource
-        console.log(uploadState, uploadRes);
+        console.log("Upload:", uploadState, uploadRes);
         if (uploadState === "FAILURE")
           throw new Error(
             JSON.stringify({

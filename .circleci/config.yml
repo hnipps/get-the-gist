@@ -56,7 +56,6 @@ jobs:
               echo "GITHUB_CLIENT_ID="$GITHUB_DEV_CLIENT_ID >> .env
               echo "GITHUB_CLIENT_SECRET="$GITHUB_DEV_CLIENT_SECRET >> .env
             fi
-            cat .env
             yarn run build
 
       - run:
