@@ -9,8 +9,9 @@ const webStore = require("chrome-webstore-upload")({
 
 webStore.fetchToken().then(async token => {
   const myZipFile = fs.createReadStream("./get-the-gist.zip");
-  try {
-    webStore.uploadExisting(myZipFile, token).then(
+  webStore
+    .uploadExisting(myZipFile, token)
+    .then(
       ({ uploadState, ...uploadRes }) => {
         // Response is a Resource Representation
         // https://developer.chrome.com/webstore/webstore_api/items#resource
@@ -38,11 +39,11 @@ webStore.fetchToken().then(async token => {
       err => {
         throw new Error(err);
       }
+    )
+    .catch(err =>
+      console.error(
+        "Something went wrong when uploading and publishing...",
+        err
+      )
     );
-  } catch (error) {
-    console.error(
-      "Something went wrong when uploading and publishing...",
-      error
-    );
-  }
 });
