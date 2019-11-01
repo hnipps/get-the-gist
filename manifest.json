@@ -1,6 +1,6 @@
 {
   "name": "Get the Gist",
-  "version": "1.0.4",
+  "version": "1.0.10",
   "description": "Easily convert Medium.com code blocks into Gists!",
   "permissions": [
     "storage",
@@ -13,6 +13,12 @@
     "scripts": ["background.js"],
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "matches": ["https://medium.com/**/*"],
+      "js": ["scripts/get-code-snippets.js"]
+    }
+  ],
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {

@@ -1,12 +1,12 @@
-import { h } from 'preact';
+import { h } from "preact";
 
-import LoadingSpinner from '../loading-spinner/LoadingSpinner';
+import LoadingSpinner from "../loading-spinner/LoadingSpinner";
 
-import './button.css';
+import "./button.css";
 
 const Button = ({ className, loading, children, ...props }) => (
   <button
-    className={`button label ${loading ? 'button--loading' : ''} ${className}`}
+    className={`button label ${loading ? "button--loading" : ""} ${className}`}
     {...props}
   >
     {children}

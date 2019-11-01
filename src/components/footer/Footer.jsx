@@ -1,16 +1,16 @@
-import { h } from 'preact';
+import { h } from "preact";
 
-import './footer.css';
-import TextField from '../text-field/TextField';
-import Button from '../button/Button';
+import "./footer.css";
+import TextField from "../text-field/TextField";
+import Button from "../button/Button";
 
 const Footer = ({
   onCreateGist,
   onGistDescriptionChange,
   snippetCount,
-  loading,
+  loading
 }) => {
-  const snippetsString = snippetCount === 1 ? 'snippet' : 'snippets';
+  const snippetsString = snippetCount === 1 ? "snippet" : "snippets";
   return (
     <section className="footer">
       {snippetCount} {snippetsString} selected.

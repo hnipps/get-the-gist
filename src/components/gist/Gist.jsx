@@ -1,6 +1,6 @@
-import { h } from 'preact';
+import { h } from "preact";
 
-import './gist.css';
+import "./gist.css";
 
 const Gist = ({ code }) => <pre className="gist__code">{code}</pre>;
 

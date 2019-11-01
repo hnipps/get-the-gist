@@ -1,10 +1,10 @@
-import { h } from 'preact';
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import { h } from "preact";
+import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 
-import IconButton from '../icon-button/IconButton';
-import Heading from '../heading/Heading';
+import IconButton from "../icon-button/IconButton";
+import Heading from "../heading/Heading";
 
-import './header.css';
+import "./header.css";
 
 const Header = ({ onRefresh, loading }) => {
   return (

@@ -1,6 +1,6 @@
-import { h } from 'preact';
-import { useState, useCallback } from 'preact/hooks';
-import IconButton from '../icon-button/IconButton';
+import { h } from "preact";
+import { useState, useCallback } from "preact/hooks";
+import IconButton from "../icon-button/IconButton";
 
 const ToggleButton = ({
   icon: { on: onIcon, off: offIcon },
@@ -14,7 +14,7 @@ const ToggleButton = ({
       isOn ? onOnClick(ev) : offOnClick(ev);
       setIsOnState(!isOn);
     },
-    [isOn, onOnClick, offOnClick, setIsOnState],
+    [isOn, onOnClick, offOnClick, setIsOnState]
   );
   return (
     <IconButton

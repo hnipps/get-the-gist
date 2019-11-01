@@ -1,8 +1,8 @@
-import { h } from 'preact';
-import Heading from '../heading/Heading';
-import Button from '../button/Button';
+import { h } from "preact";
+import Heading from "../heading/Heading";
+import Button from "../button/Button";
 
-import './login.css';
+import "./login.css";
 
 const Login = ({ onLogin, loading }) => {
   return (

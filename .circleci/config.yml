@@ -10,8 +10,6 @@ jobs:
       - image: circleci/node:10.16.3-buster
 
     environment:
-      - APP_ID: efaekpejcfjpejdjhkolhlnpepimjcio
-      - DEV_APP_ID: dedacmldgkhekcocalpdeldpmejppjkc
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -42,72 +40,40 @@ jobs:
             - ~/.cache/yarn
 
       - run:
-          name: 'Run Tests'
-          command: echo "Run any tests here."
+          name: "Run Tests"
+          command: yarn test
 
       - run:
-          name: 'Build Extension'
+          name: "Build Extension"
           command: |
-            echo "GITHUB_CLIENT_ID="$GITHUB_CLIENT_ID >> .env
-            echo "GITHUB_CLIENT_SECRET="$GITHUB_CLIENT_SECRET >> .env
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "Setting up master env vars..."
+              echo "GITHUB_CLIENT_ID="$GITHUB_PROD_CLIENT_ID >> .env
+              echo "GITHUB_CLIENT_SECRET="$GITHUB_PROD_CLIENT_SECRET >> .env
+            fi
+            if [ "${CIRCLE_BRANCH}" == "staging" ]; then
+              echo "Setting up staging env vars..."
+              echo "GITHUB_CLIENT_ID="$GITHUB_DEV_CLIENT_ID >> .env
+              echo "GITHUB_CLIENT_SECRET="$GITHUB_DEV_CLIENT_SECRET >> .env
+            fi
+            cat .env
             yarn run build
 
       - run:
-          name: 'Package Extension'
+          name: "Package Extension"
           command: zip -r get-the-gist.zip build
 
       - run:
-          name: 'Upload & Publish Extension to the Google Chrome Store'
+          name: "Upload & Publish Extension to the Google Chrome Store"
           command: |
             # If branch is master then publish the app to the Chrome Web Store
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              echo "Uploading..."
-              ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
-              UPLOAD_RESPONSE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T get-the-gist.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}")
-              echo "$UPLOAD_RESPONSE"
-              UPLOAD_STATE=$(echo "$UPLOAD_RESPONSE" | jq -r .uploadState)
-              UPLOAD_ERRORS=$(echo "$UPLOAD_RESPONSE" | jq -r .itemError[]?)
-              echo "$UPLOAD_ERRORS"
-              if [ "${UPLOAD_STATE}" == "FAILURE" ]; then
-                echo "ERROR. Unable to upload. [Chrome Extension upload state: ${UPLOAD_STATE}]"
-                echo "$UPLOAD_RESPONSE"
-                exit 1
-              fi
-              echo "Upload successful"
-              echo "Publishing..."
-              PUBLISH_RESPONSE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish")
-              echo "$PUBLISH_RESPONSE"
-              PUBLISH_STATE=$(echo "$PUBLISH_RESPONSE" | jq -r .status[]?)
-              if [ "${PUBLISH_STATE}" != "OK" ]; then
-                echo "ERROR. Unable to publish. [Chrome Extension publish state: ${PUBLISH_STATE}]"
-                echo "$PUBLISH_RESPONSE"
-                exit 1
-              fi
-              echo "Master publish successful"
+              export APP_ID=efaekpejcfjpejdjhkolhlnpepimjcio
+              export PUBLISH_TARGET=default
             fi
             # If branch is staging then publish the app for testers only
             if [ "${CIRCLE_BRANCH}" == "staging" ]; then
-              echo "Uploading..."
-              ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
-              UPLOAD_RESPONSE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T get-the-gist.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${DEV_APP_ID}")
-              echo "$UPLOAD_RESPONSE"
-              UPLOAD_STATE=$(echo "$UPLOAD_RESPONSE" | jq -r .uploadState)
-              UPLOAD_ERRORS=$(echo "$UPLOAD_RESPONSE" | jq -r .itemError[]?)
-              echo "$UPLOAD_ERRORS"
-              if [ "${UPLOAD_STATE}" == "FAILURE" ]; then
-                echo "ERROR. Unable to upload. [Chrome Extension upload state: ${UPLOAD_STATE}]"
-                echo "$UPLOAD_RESPONSE"
-                exit 1
-              fi
-              echo "Upload successful"
-              echo "Publishing to staging..."
-              PUBLISH_RESPONSE=$(curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -d "{"target": "trustedTesters"}" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${DEV_APP_ID}/publish")
-              echo "$PUBLISH_RESPONSE"
-              PUBLISH_STATE=$(echo "$PUBLISH_RESPONSE" | jq -r .status[]?)
-              if [ "${PUBLISH_STATE}" != "OK" ]; then
-                echo "ERROR. Unable to publish. [Chrome Extension publish state: ${PUBLISH_STATE}]"
-                echo "$PUBLISH_RESPONSE"
-                exit 1
-              fi
-              echo "Staging publish successful"
+              export APP_ID=dedacmldgkhekcocalpdeldpmejppjkc
+              export PUBLISH_TARGET=trustedTesters
             fi
+            node scripts/update.js

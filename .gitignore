@@ -1,5 +1,5 @@
 node_modules
-scripts
+/local
 .cache
 build
 *.zip

@@ -1,3 +1,2 @@
-export * from './create-gist';
-export * from './get-code-blocks';
-export * from './oauth';
+export { setupCreateGist } from "./create-gist";
+export { login, loginCode$ } from "./login";
