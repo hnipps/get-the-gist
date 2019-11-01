@@ -46,18 +46,13 @@ jobs:
       - run:
           name: "Build Extension"
           command: |
-            # TODO: Fix this!
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "Setting up master env vars..."
-              echo "GITHUB_CLIENT_ID="$GITHUB_CLIENT_ID
-              echo "GITHUB_CLIENT_SECRET="$GITHUB_CLIENT_SECRET
-              echo "GITHUB_CLIENT_ID="$GITHUB_CLIENT_ID >> .env
-              echo "GITHUB_CLIENT_SECRET="$GITHUB_CLIENT_SECRET >> .env
+              echo "GITHUB_CLIENT_ID="$GITHUB_PROD_CLIENT_ID >> .env
+              echo "GITHUB_CLIENT_SECRET="$GITHUB_PROD_CLIENT_SECRET >> .env
             fi
             if [ "${CIRCLE_BRANCH}" == "staging" ]; then
               echo "Setting up staging env vars..."
-              echo "GITHUB_CLIENT_ID="$GITHUB_DEV_CLIENT_ID
-              echo "GITHUB_CLIENT_SECRET="$GITHUB_DEV_CLIENT_SECRET
               echo "GITHUB_CLIENT_ID="$GITHUB_DEV_CLIENT_ID >> .env
               echo "GITHUB_CLIENT_SECRET="$GITHUB_DEV_CLIENT_SECRET >> .env
             fi
