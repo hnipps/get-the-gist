@@ -73,10 +73,12 @@ jobs:
           command: |
             # If branch is master then publish the app to the Chrome Web Store
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              export APP_ID=$efaekpejcfjpejdjhkolhlnpepimjcio
+              export APP_ID=efaekpejcfjpejdjhkolhlnpepimjcio
+              export PUBLISH_TARGET=default
             fi
             # If branch is staging then publish the app for testers only
             if [ "${CIRCLE_BRANCH}" == "staging" ]; then
               export APP_ID=dedacmldgkhekcocalpdeldpmejppjkc
+              export PUBLISH_TARGET=trustedTesters
             fi
             node scripts/update.js

@@ -9,12 +9,19 @@ const webStore = require("chrome-webstore-upload")({
 webStore.fetchToken().then(async token => {
   const myZipFile = fs.createReadStream("./get-the-gist.zip");
   webStore.uploadExisting(myZipFile, token).then(
-    uploadRes => {
+    ({ uploadState, ...uploadRes }) => {
       // Response is a Resource Representation
       // https://developer.chrome.com/webstore/webstore_api/items#resource
-      console.log("Upload successful!", uploadRes);
+      console.log(uploadState, uploadRes);
+      if (uploadState === "FAILURE")
+        throw new Error(
+          JSON.stringify({
+            uploadState,
+            ...uploadRes
+          })
+        );
 
-      const target = "trustedTesters"; // optional. Can also be 'trustedTesters'
+      const target = process.env.PUBLISH_TARGET; // optional. Can also be 'trustedTesters'
       webStore.publish(target, token).then(
         publishRes => {
           // Response is documented here:
