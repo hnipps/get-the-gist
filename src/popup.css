@@ -3,16 +3,5 @@ body {
 }
 
 .popup__wrapper {
-  font-family: 'Lato', sans-serif;
-}
-
-.popup__main-content-wrapper {
-  width: 48rem;
-}
-
-.snippet-status__list-item {
-  display: flex;
-  justify-content: center;
-  background-color: var(--color-light-gray);
-  padding: 0.5rem 0.75rem;
+  font-family: "Lato", sans-serif;
 }

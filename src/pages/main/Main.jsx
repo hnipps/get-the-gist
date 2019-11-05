@@ -13,6 +13,8 @@ import Overlay from "../../components/overlay/Overlay";
 import Dialog from "../../components/dialog/Dialog";
 import CopyToClipboard from "../../components/copy-to-clipboard/CopyToClipboard";
 
+import "./main.css";
+
 const Main = ({ currentTab, createGist }) => {
   const [selectedSnippets, setSelectedSnippets] = useState([]);
   const [gistDescription, setGistDescription] = useState();
@@ -115,7 +117,7 @@ const Main = ({ currentTab, createGist }) => {
 
   return (
     <Fragment>
-      <div className="popup__main-content-wrapper">
+      <div className="main">
         <Header onRefresh={handleRefresh} loading={isRefreshing} />
         <List>
           {snippetList ? (

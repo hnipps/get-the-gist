@@ -1,0 +1,13 @@
+.main {
+  width: 48rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.snippet-status__list-item {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-light-gray);
+  padding: 0.5rem 0.75rem;
+}
