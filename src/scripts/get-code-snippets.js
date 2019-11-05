@@ -2,33 +2,27 @@ import { getCodeSnippets } from "../utils/get-code-snippets-util";
 
 let state = {
   findingSnippets: false,
-  snippetsSaved: false,
-  currentTab: ""
+  snippetsSaved: false
 };
 
-chrome.runtime.onMessage.addListener((msg, _, sendResponse) => {
+chrome.runtime.onMessage.addListener(msg => {
   if (msg.action == "find_snippets") {
-    const { findingSnippets, snippetsSaved } = state;
-
-    if (!findingSnippets) saveSnippets();
-    sendResponse(snippetsSaved);
+    if (!state.findingSnippets) saveSnippets();
   }
 });
 
-const saveSnippets = () =>
-  new Promise(res => {
-    state = { ...state, findingSnippets: true };
-    const codeSnippets = getCodeSnippets();
-    const url = location.href;
+const saveSnippets = () => {
+  state = { ...state, findingSnippets: true };
+  const codeSnippets = getCodeSnippets();
+  const { href: url } = location;
 
-    chrome.storage.local.set({ snippets: { [url]: { codeSnippets } } }, () => {
-      state = {
-        ...state,
-        findingSnippets: false,
-        snippetsSaved: true
-      };
-      res();
-    });
+  chrome.storage.local.set({ snippets: { [url]: { codeSnippets } } }, () => {
+    state = {
+      ...state,
+      findingSnippets: false,
+      snippetsSaved: true
+    };
   });
+};
 
 saveSnippets();

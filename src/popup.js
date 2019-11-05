@@ -23,6 +23,7 @@ const App = () => {
     port.onMessage.addListener(() => setIsLoggingIn(false));
   };
 
+  // TODO: Can we use useEffect here? I suspect it's called many, many times right now
   chrome.storage.local.get("accessToken", ({ accessToken }) =>
     setAccessToken(accessToken)
   );

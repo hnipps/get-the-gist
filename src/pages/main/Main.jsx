@@ -78,18 +78,22 @@ const Main = ({ currentTab, createGist }) => {
     setSelectedSnippets(newSelectedSnippets);
   };
 
-  const handleGistDescriptionChange = useCallback(ev =>
-    setGistDescription(ev.target.value)
+  const handleGistDescriptionChange = useCallback(
+    ev => setGistDescription(ev.target.value),
+    [setGistDescription]
   );
 
   const handleSnippetFilenameChange = codeBlock =>
-    useCallback(ev => {
-      const newSnippets = [
-        ...snippetList.filter(block => block.id !== codeBlock.id),
-        { ...codeBlock, filename: ev.target.value }
-      ].sort((a, b) => a.order - b.order);
-      setSnippetList(newSnippets);
-    });
+    useCallback(
+      ev => {
+        const newSnippets = [
+          ...snippetList.filter(block => block.id !== codeBlock.id),
+          { ...codeBlock, filename: ev.target.value }
+        ].sort((a, b) => a.order - b.order);
+        setSnippetList(newSnippets);
+      },
+      [setSnippetList, snippetList, codeBlock]
+    );
 
   const findSnippets = useCallback(
     () =>
@@ -107,11 +111,13 @@ const Main = ({ currentTab, createGist }) => {
 
   useEffect(
     () =>
-      chrome.storage.onChanged.addListener((changes, area) => {
-        if (area === "local") {
-          handleSnippetRetrieval({ snippets: changes.snippets.newValue });
+      chrome.storage.onChanged.addListener(
+        ({ snippets: { newValue } }, area) => {
+          if (area === "local") {
+            handleSnippetRetrieval({ snippets: newValue });
+          }
         }
-      }),
+      ),
     [handleSnippetRetrieval]
   );
 
