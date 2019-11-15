@@ -1,6 +1,5 @@
 .main {
   width: 48rem;
-  max-height: 600px;
   display: flex;
   flex-direction: column;
 }

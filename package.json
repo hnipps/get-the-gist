@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "copy": "cp -R images manifest.json src/popup.html build/",
-    "dev": "parcel build src/popup.js src/background.js src/scripts/get-code-snippets.js -d build --no-content-hash --no-minify && yarn run copy",
-    "build": "parcel build src/popup.js src/background.js src/scripts/get-code-snippets.js -d build --no-content-hash --no-source-maps && yarn run copy",
+    "dev": "parcel build src/popup.tsx src/background.ts src/scripts/get-code-snippets.ts -d build --no-content-hash --no-minify && yarn run copy",
+    "build": "parcel build src/popup.tsx src/background.ts src/scripts/get-code-snippets.ts -d build --no-content-hash --no-source-maps && yarn run copy",
     "package": "rm -f get-the-gist.zip && zip -r get-the-gist.zip build",
     "test": "jest"
   },
@@ -29,6 +29,8 @@
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "@types/chrome": "^0.0.91",
+    "@types/uuid": "^3.4.6",
     "chrome-webstore-upload": "^0.2.2",
     "enzyme": "^3.10.0",
     "enzyme-adapter-preact-pure": "^2.1.0",
@@ -46,6 +48,7 @@
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
     "parcel-bundler": "^1.12.3",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "typescript": "^3.7.2"
   }
 }
