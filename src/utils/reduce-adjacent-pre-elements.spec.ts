@@ -1,30 +1,35 @@
-import { reduceAdjacentPreElements } from "./reduce-adjacent-pre-elements";
+import { reduceAdjacentElements } from "./reduce-adjacent-pre-elements";
+
+const reduceAdjacentPreElements = reduceAdjacentElements("pre");
 
 describe("combineAdjacentPreElements", () => {
   const expectedText = ["this is some text", "here's some more text"];
 
   describe("when the first item has an adjacent pre element", () => {
-    let preElement1;
-    let preElement2;
+    let preElement1: HTMLPreElement;
+    let preElement2: HTMLPreElement;
 
     beforeEach(() => {
       preElement1 = document.createElement("pre");
       preElement1.innerText = expectedText[0];
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(preElement1);
+      const bodyEl = document.getElementsByTagName("body").item(0);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(preElement1);
+      }
+
       preElement2 = document.createElement("pre");
       preElement2.innerText = expectedText[1];
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(preElement2);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(preElement2);
+      }
+
       const div = document.createElement("div");
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(div);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(div);
+      }
     });
 
     afterEach(() => {
@@ -56,20 +61,22 @@ describe("combineAdjacentPreElements", () => {
   });
 
   describe("when the first item does not have an adjacent pre element", () => {
-    let preElement1;
+    let preElement1: HTMLPreElement;
 
     beforeEach(() => {
       preElement1 = document.createElement("pre");
       preElement1.innerText = expectedText[0];
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(preElement1);
+      const bodyEl = document.getElementsByTagName("body").item(0);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(preElement1);
+      }
+
       const div = document.createElement("div");
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(div);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(div);
+      }
     });
 
     afterEach(() => {
@@ -87,15 +94,16 @@ describe("combineAdjacentPreElements", () => {
   });
 
   describe("when the first item is the last child element", () => {
-    let preElement1;
+    let preElement1: HTMLPreElement;
 
     beforeEach(() => {
       preElement1 = document.createElement("pre");
       preElement1.innerText = expectedText[0];
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(preElement1);
+      const bodyEl = document.getElementsByTagName("body").item(0);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(preElement1);
+      }
     });
 
     afterEach(() => {

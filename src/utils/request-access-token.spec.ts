@@ -1,7 +1,6 @@
-import "isomorphic-fetch";
-
 import { requestAccessToken, accessToken$ } from "./request-access-token";
 import { awaitStream } from "../../testing-utils/await-stream";
+import { setupMockFetch, mockFetch } from "../../testing-utils/mock-fetch";
 
 // Mock environment variables
 jest.mock("./constants", () => ({
@@ -17,8 +16,7 @@ const REDIRECT_URI = "http://my-redirect.com";
 // Mock Fetch
 const mockJson = jest.fn();
 mockJson.mockResolvedValue({ access_token: ACCESS_TOKEN });
-global.fetch = jest.fn();
-global.fetch.mockResolvedValue({ json: mockJson });
+setupMockFetch({ json: mockJson });
 
 describe("requestAccessToken", () => {
   it("should return an access token", async () => {
@@ -31,7 +29,7 @@ describe("requestAccessToken", () => {
     await awaitStream(
       accessToken$,
       accessToken => {
-        expect(global.fetch.mock.calls).toEqual([
+        expect(mockFetch.mock.calls).toEqual([
           [
             `https://github.com/login/oauth/access_token?client_id=test-id&client_secret=test-secret&code=${CODE}&redirect_uri=${expectedRedirectUri}`,
             expectedFetchData

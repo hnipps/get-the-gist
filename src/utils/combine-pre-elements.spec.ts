@@ -1,4 +1,4 @@
-import { combinePreElements } from "./combine-pre-elements";
+import { combineElements } from "./combine-pre-elements";
 
 describe("combinePreElements", () => {
   const expectedText = ["this is some text", "here's some more text"];
@@ -11,14 +11,15 @@ describe("combinePreElements", () => {
     it("should combine the pre elements", () => {
       const preElement1 = document.createElement("pre");
       preElement1.innerText = expectedText[0];
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(preElement1);
+      const bodyEl = document.getElementsByTagName("body").item(0);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(preElement1);
+      }
 
       const preElements = document.getElementsByTagName("pre");
 
-      expect(combinePreElements(preElements)).toEqual({
+      expect(combineElements(preElements, "pre")).toEqual({
         combined: [[preElement1]],
         temp: []
       });
@@ -30,20 +31,22 @@ describe("combinePreElements", () => {
       const expectedText = ["this is some text", "here's some more text"];
       const preElement1 = document.createElement("pre");
       preElement1.innerText = expectedText[0];
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(preElement1);
+      const bodyEl = document.getElementsByTagName("body").item(0);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(preElement1);
+      }
+
       const preElement2 = document.createElement("pre");
       preElement2.innerText = expectedText[1];
-      document
-        .getElementsByTagName("body")
-        .item(0)
-        .appendChild(preElement2);
+
+      if (bodyEl !== null) {
+        bodyEl.appendChild(preElement2);
+      }
 
       const preElements = document.getElementsByTagName("pre");
 
-      expect(combinePreElements(preElements)).toEqual({
+      expect(combineElements(preElements, "pre")).toEqual({
         combined: [[preElement1, preElement2]],
         temp: []
       });

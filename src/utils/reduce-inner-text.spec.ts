@@ -2,8 +2,8 @@ import { reduceInnerText } from "./reduce-inner-text";
 
 describe("reduceInnerText", () => {
   const expectedText = ["this is some text", "here's some more text"];
-  let preElement1;
-  let preElement2;
+  let preElement1: HTMLPreElement;
+  let preElement2: HTMLPreElement;
 
   beforeEach(() => {
     preElement1 = document.createElement("pre");
