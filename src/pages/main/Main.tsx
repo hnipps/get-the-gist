@@ -52,7 +52,7 @@ const Main = ({ currentTab, createGist }: MainProps) => {
   useEffect(() => retrieveSnippets(), [retrieveSnippets]);
 
   const handleCreateGistClick = useCallback(
-    (snippets: CodeSnippet[], description: string) => (event: MouseEvent) => {
+    (snippets: CodeSnippet[], description: string) => (event: Event) => {
       event.preventDefault();
 
       const files = snippets.reduce<GistData>(

@@ -1,4 +1,4 @@
-import { h, Fragment, JSX, ComponentType } from "preact";
+import { h, Fragment } from "preact";
 import { useState, useCallback } from "preact/hooks";
 import { FontAwesomeIcon } from "@aduh95/preact-fontawesome";
 import {
