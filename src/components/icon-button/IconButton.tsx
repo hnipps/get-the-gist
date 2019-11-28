@@ -11,16 +11,22 @@ const IconButton = ({
   variant,
   loading = false,
   className,
+  size,
+  color = "dark",
   ...props
 }: IconButtonProps) => {
   const variantClass = variant ? `icon-button--${variant}` : "";
   const loadingClass = loading ? "icon-button--loading" : "";
+  const sizeClass = size === "s" ? "icon-button--small" : "";
+  const colorClass = `icon-button--${color}`;
   return (
     <button
       className={combineClasses(
         "icon-button",
         variantClass,
         loadingClass,
+        sizeClass,
+        colorClass,
         className
       )}
       disabled={loading}

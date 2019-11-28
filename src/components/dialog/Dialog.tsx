@@ -15,7 +15,13 @@ const Dialog = ({ title, children, onDismiss, ...props }: DialogProps) => {
         <Heading element="h4" className="h4 dialog__heading">
           {title}
         </Heading>
-        <IconButton onClick={onDismiss} icon={faTimes} variant="tertiary" />
+        <IconButton
+          onClick={onDismiss}
+          icon={faTimes}
+          size="s"
+          color="light"
+          variant="tertiary"
+        />
       </header>
       <section className="dialog__content">{children}</section>
     </div>
