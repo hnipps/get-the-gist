@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "copy": "cp -R images manifest.json src/popup.html build/",
-    "dev": "parcel build src/popup.tsx src/background.ts src/scripts/get-code-snippets.ts -d build --no-content-hash --no-minify && yarn run copy",
+    "dev": "parcel dev-environment/index.html --out-dir dev-dist/",
     "build": "parcel build src/popup.tsx src/background.ts src/scripts/get-code-snippets.ts -d build --no-content-hash --no-source-maps && yarn run copy",
     "package": "rm -f get-the-gist.zip && zip -r get-the-gist.zip build",
     "test": "jest"
