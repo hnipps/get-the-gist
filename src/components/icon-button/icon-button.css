@@ -11,6 +11,8 @@
   height: 2rem;
   font-size: 1.25rem;
   padding: 0;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .icon-button:active {
@@ -75,10 +77,10 @@
   color: var(--color-white);
 }
 
-.icon-button--light:hover {
+.icon-button--tertiary.icon-button--light:hover {
   background-color: var(--color-black);
 }
 
-.icon-button--light:active {
+.icon-button--tertiary.icon-button--light:active {
   color: var(--color-gray);
 }

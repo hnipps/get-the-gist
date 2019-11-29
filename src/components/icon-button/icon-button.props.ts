@@ -6,6 +6,7 @@ export interface IconButtonProps
   icon: IconProp;
   variant: "primary" | "secondary" | "tertiary";
   loading?: boolean;
+  element?: "a" | "button";
   size?: "s" | "l";
   color?: "dark" | "light";
 }

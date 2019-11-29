@@ -10,6 +10,7 @@ const IconButton = ({
   icon,
   variant,
   loading = false,
+  element: Element = "button",
   className,
   size,
   color = "dark",
@@ -20,7 +21,7 @@ const IconButton = ({
   const sizeClass = size === "s" ? "icon-button--small" : "";
   const colorClass = `icon-button--${color}`;
   return (
-    <button
+    <Element
       className={combineClasses(
         "icon-button",
         variantClass,
@@ -33,7 +34,7 @@ const IconButton = ({
       {...props}
     >
       <FontAwesomeIcon icon={icon} />
-    </button>
+    </Element>
   );
 };
 

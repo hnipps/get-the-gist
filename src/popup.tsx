@@ -12,7 +12,7 @@ import { setupCreateGist } from "./utils/setup-create-gist";
 const App = () => {
   const [accessToken, setAccessToken] = useState(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [currentTab, setCurrentTab] = useState();
+  const [currentTab, setCurrentTab] = useState("");
 
   const handleLogin = e => {
     e.preventDefault();

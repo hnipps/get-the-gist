@@ -25,6 +25,7 @@ const ToggleButton = ({
           icon={onIcon}
           className={isOn ? onClass : offClass}
           onClick={handleClick}
+          color="light"
           {...props}
         />
       ) : (
@@ -32,6 +33,7 @@ const ToggleButton = ({
           icon={offIcon}
           className={isOn ? onClass : offClass}
           onClick={handleClick}
+          color="light"
           {...props}
         />
       )}

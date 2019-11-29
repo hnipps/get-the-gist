@@ -8,7 +8,7 @@ type ToggleOptions<T> = {
 };
 
 export interface ToggleButtonProps
-  extends Omit<JSX.HTMLAttributes, "icon" | "onClick"> {
+  extends Omit<JSX.HTMLAttributes, "icon" | "onClick" | "size"> {
   icon: ToggleOptions<IconProp>;
   classes: ToggleOptions<string>;
   onClick: ToggleOptions<(event: MouseEvent) => void>;

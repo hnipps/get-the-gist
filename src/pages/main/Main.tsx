@@ -36,6 +36,7 @@ const Main = ({ currentTab, createGist }: MainProps) => {
     (result: { [items: string]: any }) => {
       if (
         typeof currentTab !== "undefined" &&
+        currentTab !== "" &&
         isOfType<SnippetList, "snippets">(result, "snippets")
       ) {
         setSnippetList(result.snippets[currentTab].codeSnippets);
