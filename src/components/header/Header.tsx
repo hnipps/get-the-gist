@@ -9,10 +9,16 @@ import {
 import IconButton from "../icon-button/IconButton";
 import Heading from "../heading/Heading";
 import { HeaderProps } from "./header.props";
+import { sendEmail } from "../../utils/send-email";
 
 import "./header.css";
 
 const Header = ({ onRefresh, loading }: HeaderProps) => {
+  const handleFeedbackButtonClick = () => {
+    console.log("Feedback!");
+
+    sendEmail("getthegistapp@gmail.com");
+  };
   return (
     <header className="header">
       <Heading element="h1" className="h1">
@@ -20,18 +26,21 @@ const Header = ({ onRefresh, loading }: HeaderProps) => {
       </Heading>
       <span class="header__icon-wrapper">
         <IconButton
-          element="a"
+          title="Give feedback"
+          element="button"
           icon={faBullhorn}
           variant="tertiary"
-          href="mailto:getthegistapp@gmail.com"
+          onClick={handleFeedbackButtonClick}
         />
         <IconButton
+          title="Sign out"
           className="header__icon-centre"
           icon={faSignOutAlt}
           variant="tertiary"
           onClick={() => null}
         />
         <IconButton
+          title="Refresh snippets"
           icon={faSyncAlt}
           variant="primary"
           onClick={onRefresh}
