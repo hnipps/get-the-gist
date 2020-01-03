@@ -9,6 +9,9 @@ import { CopyToClipboardProps } from "./copy-to-clipboard.props";
 
 const CopyToClipboard = ({ value, ...props }: CopyToClipboardProps) => {
   const handleCopyClick = useCallback(() => copy(value), [value]);
+  
+  // @ts-ignore - there's an issue with the types
+  const Icon = <FontAwesomeIcon icon={accordionIcon} />;
   return (
     <div className="copy-to-clipboard">
       <input
@@ -18,7 +21,7 @@ const CopyToClipboard = ({ value, ...props }: CopyToClipboardProps) => {
         {...props}
       />
       <button className="copy-to-clipboard__button" onClick={handleCopyClick}>
-        <FontAwesomeIcon icon={faCopy} />
+        {Icon}
       </button>
     </div>
   );

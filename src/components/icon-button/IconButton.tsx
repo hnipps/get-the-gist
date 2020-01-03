@@ -20,6 +20,9 @@ const IconButton = ({
   const loadingClass = loading ? "icon-button--loading" : "";
   const sizeClass = size === "s" ? "icon-button--small" : "";
   const colorClass = `icon-button--${color}`;
+
+  // @ts-ignore - there's an issue with the types
+  const Icon = <FontAwesomeIcon icon={icon} />;
   return (
     // @ts-ignore
     <Element
@@ -34,7 +37,7 @@ const IconButton = ({
       disabled={loading}
       {...props}
     >
-      <FontAwesomeIcon icon={icon} />
+      {Icon}
     </Element>
   );
 };
