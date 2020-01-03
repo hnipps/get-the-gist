@@ -1,5 +1,5 @@
-@import '../../styles/variables.css';
-@import '../../styles/animation.css';
+@import "../../styles/variables.css";
+@import "../../styles/animation.css";
 
 .icon-button {
   display: flex;
@@ -11,6 +11,8 @@
   height: 2rem;
   font-size: 1.25rem;
   padding: 0;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .icon-button:active {
@@ -41,17 +43,44 @@
   background: var(--color-blue);
 }
 
-.icon-button--secondary:focus {
+.icon-button--secondary:focus,
+.icon-button--tertiary:focus {
   outline: none;
   border: 2px solid var(--color-blue);
 }
 
 .icon-button--tertiary {
-  --icon-button-tertiary-width: 1rem;
   background: none;
+}
+
+.icon-button--tertiary:hover {
+  background-color: var(--color-light-gray);
+}
+
+.icon-button--tertiary:active {
+  background-color: var(--color-gray);
+}
+
+.icon-button--small {
+  --icon-button-tertiary-width: 1rem;
   width: var(--icon-button-tertiary-width);
   height: var(--icon-button-tertiary-width);
-  color: var(--color-white);
   /* TODO: set font-size in order to change icon size */
   font-size: var(--icon-button-tertiary-width);
+}
+
+.icon-button--dark {
+  color: var(--color-dark-gray);
+}
+
+.icon-button--light {
+  color: var(--color-white);
+}
+
+.icon-button--tertiary.icon-button--light:hover {
+  background-color: var(--color-black);
+}
+
+.icon-button--tertiary.icon-button--light:active {
+  color: var(--color-gray);
 }
