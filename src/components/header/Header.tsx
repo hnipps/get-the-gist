@@ -27,17 +27,11 @@ const Header = ({ onRefresh, loading }: HeaderProps) => {
       <span class="header__icon-wrapper">
         <IconButton
           title="Give feedback"
+          className="header__icon-centre"
           element="button"
           icon={faBullhorn}
           variant="tertiary"
           onClick={handleFeedbackButtonClick}
-        />
-        <IconButton
-          title="Sign out"
-          className="header__icon-centre"
-          icon={faSignOutAlt}
-          variant="tertiary"
-          onClick={() => null}
         />
         <IconButton
           title="Refresh snippets"
