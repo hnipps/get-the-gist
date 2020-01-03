@@ -1,3 +1,3 @@
 import { JSX } from 'preact';
 
-export interface TextFieldProps extends JSX.HTMLAttributes {}
+export interface TextFieldProps extends JSX.HTMLAttributes<HTMLInputElement> {}

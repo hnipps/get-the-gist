@@ -21,6 +21,7 @@ const IconButton = ({
   const sizeClass = size === "s" ? "icon-button--small" : "";
   const colorClass = `icon-button--${color}`;
   return (
+    // @ts-ignore
     <Element
       className={combineClasses(
         "icon-button",

@@ -17,13 +17,14 @@ const Accordion = ({ children, header }: AccordionProps) => {
   ]);
   const accordionIcon = isOpen ? faChevronDown : faChevronRight;
 
+  // @ts-ignore
+  const Icon = <FontAwesomeIcon icon={accordionIcon} />;
+
   return (
     <Fragment>
       <dt>
         <button className="accordion__button" onClick={handleHeaderClick}>
-          <span className="accordion__icon-wrapper">
-            <FontAwesomeIcon icon={accordionIcon} />
-          </span>
+          <span className="accordion__icon-wrapper">{Icon}</span>
           {header}
         </button>
       </dt>
