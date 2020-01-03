@@ -75,4 +75,6 @@ jobs:
               export APP_ID=dedacmldgkhekcocalpdeldpmejppjkc
               export PUBLISH_TARGET=trustedTesters
             fi
-            node scripts/update.js
+            if [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "master" ]; then
+              node scripts/update.js
+            fi
