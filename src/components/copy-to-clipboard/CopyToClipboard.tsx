@@ -11,7 +11,7 @@ const CopyToClipboard = ({ value, ...props }: CopyToClipboardProps) => {
   const handleCopyClick = useCallback(() => copy(value), [value]);
   
   // @ts-ignore - there's an issue with the types
-  const Icon = <FontAwesomeIcon icon={accordionIcon} />;
+  const Icon = <FontAwesomeIcon icon={faCopy} />;
   return (
     <div className="copy-to-clipboard">
       <input
