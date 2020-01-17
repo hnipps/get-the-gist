@@ -20,7 +20,7 @@ import { CodeSnippet } from "../../types/code-snippet.type";
 import "./main.css";
 import { GistData } from "../../types/gist-data.type";
 
-const Main = ({ currentTab, createGist }: MainProps) => {
+const Main = ({ currentTab, createGist, handleSignOut }: MainProps) => {
   const [selectedSnippets, setSelectedSnippets] = useState<CodeSnippet[]>([]);
   const [gistDescription, setGistDescription] = useState("");
   const [isCreatingGist, setIsCreatingGist] = useState(false);
@@ -139,7 +139,7 @@ const Main = ({ currentTab, createGist }: MainProps) => {
   return (
     <Fragment>
       <div className="main">
-        <Header onRefresh={handleRefresh} loading={isRefreshing} />
+        <Header onRefresh={handleRefresh} loading={isRefreshing} handleSignOut={handleSignOut} />
         <List>
           {snippetList ? (
             snippetList.map(codeBlock => (

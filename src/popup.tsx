@@ -14,13 +14,18 @@ const App = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [currentTab, setCurrentTab] = useState("");
 
-  const handleLogin = e => {
+  const handleLogin = (e: MouseEvent) => {
     e.preventDefault();
     setIsLoggingIn(true);
 
     const port = chrome.runtime.connect({ name: "login" });
     port.postMessage({ action: "login" });
     port.onMessage.addListener(() => setIsLoggingIn(false));
+  };
+
+  const handleSignOut = (e: MouseEvent) => {
+    e.preventDefault();
+    chrome.storage.local.remove("accessToken", () => setAccessToken(undefined));
   };
 
   // TODO: Can we use useEffect here? I suspect it's called many, many times right now
@@ -43,7 +48,7 @@ const App = () => {
     () =>
       chrome.tabs.onUpdated.addListener((_, { url }) => {
         // Might need to update this to ignore any #paths or URL queries
-        if (url !== currentTab) {
+        if (url !== currentTab && typeof url !== "undefined") {
           setCurrentTab(url);
         }
       }),
@@ -54,15 +59,21 @@ const App = () => {
     () =>
       chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const url = tabs[0].url;
-        setCurrentTab(url);
+        if (typeof url !== "undefined") {
+          setCurrentTab(url);
+        }
       }),
     [setCurrentTab]
   );
 
   return (
     <main className="popup__wrapper">
-      {accessToken ? (
-        <Main createGist={createGist} currentTab={currentTab} />
+      {accessToken && createGist ? (
+        <Main
+          createGist={createGist}
+          currentTab={currentTab}
+          handleSignOut={handleSignOut}
+        />
       ) : (
         <Login onLogin={handleLogin} loading={isLoggingIn} />
       )}
