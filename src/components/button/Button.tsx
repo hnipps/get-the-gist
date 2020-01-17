@@ -9,10 +9,13 @@ const Button = ({
   className,
   children,
   loading = false,
+  variant,
   ...props
 }: ButtonProps) => (
   <button
-    className={`button label ${loading ? "button--loading" : ""} ${className}`}
+    className={`button label ${loading ? "button--loading" : ""} ${
+      variant ? `button--${variant}` : null
+    } ${className}`}
     {...props}
   >
     {children}

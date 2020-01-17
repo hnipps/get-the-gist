@@ -1,4 +1,16 @@
+:root {
+  --confirm-button-spacing: 0.25rem;
+}
+
 body {
   margin: 0;
   font-family: "Lato", sans-serif;
+}
+
+.confirm-dialog__button {
+  width: calc(50% - var(--confirm-button-spacing));
+}
+
+.confirm-dialog__button:first-of-type {
+  margin-right: calc(var(--confirm-button-spacing) * 2);
 }

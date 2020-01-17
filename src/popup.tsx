@@ -8,11 +8,15 @@ import "./popup.css";
 import Login from "./components/login/Login";
 import Main from "./pages/main/Main";
 import { setupCreateGist } from "./utils/setup-create-gist";
+import Overlay from "./components/overlay/Overlay";
+import Dialog from "./components/dialog/Dialog";
+import Button from "./components/button/Button";
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [currentTab, setCurrentTab] = useState("");
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const handleLogin = (e: MouseEvent) => {
     e.preventDefault();
@@ -25,6 +29,11 @@ const App = () => {
 
   const handleSignOut = (e: MouseEvent) => {
     e.preventDefault();
+    setShowOverlay(true);
+  };
+
+  const confirmSignOut = () => {
+    setShowOverlay(false);
     chrome.storage.local.remove("accessToken", () => setAccessToken(undefined));
   };
 
@@ -77,6 +86,22 @@ const App = () => {
       ) : (
         <Login onLogin={handleLogin} loading={isLoggingIn} />
       )}
+      {showOverlay ? (
+        <Overlay>
+          <Dialog title="Are you sure?" onDismiss={() => setShowOverlay(false)}>
+            <Button
+              className="confirm-dialog__button"
+              variant="secondary"
+              onClick={() => setShowOverlay(false)}
+            >
+              Cancel
+            </Button>
+            <Button className="confirm-dialog__button" onClick={confirmSignOut}>
+              Sign out
+            </Button>
+          </Dialog>
+        </Overlay>
+      ) : null}
     </main>
   );
 };

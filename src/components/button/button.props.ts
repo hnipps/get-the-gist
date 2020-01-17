@@ -4,4 +4,5 @@ export interface ButtonProps extends JSX.HTMLAttributes<HTMLButtonElement> {
   children: preact.ComponentChild | preact.ComponentChildren;
   className?: string;
   loading?: boolean;
+  variant?: "secondary";
 }

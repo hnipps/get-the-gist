@@ -1,21 +1,21 @@
-@import '../../styles/variables.css';
+@import "../../styles/variables.css";
 
 .button {
   position: relative;
   padding: 0.5rem 0.75rem;
   border: none;
   border-radius: 0.5rem;
-  background: var(--color-blue);
+  background-color: var(--color-blue);
 }
 
 .button:hover,
 .button--loading {
-  background: var(--color-dark-blue);
+  background-color: var(--color-dark-blue);
 }
 
 .button--loading:after {
-  content: '';
-  background: rgba(0, 0, 0, 0.5);
+  content: "";
+  background-color: rgba(0, 0, 0, 0.5);
   height: 100%;
   width: 100%;
   position: absolute;
@@ -29,4 +29,14 @@
   top: calc(50% - 0.5rem);
   left: calc(50% - 0.5rem);
   z-index: 10;
+}
+
+.button--secondary {
+  background-color: var(--color-gray);
+  color: var(--color-dark-gray);
+}
+
+.button--secondary:hover {
+  background-color: var(--color-dark-gray);
+  color: var(--color-white);
 }
