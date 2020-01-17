@@ -1,15 +1,13 @@
 {
   "name": "gistify",
-  "version": "1.0.10",
+  "version": "1.1.1",
   "main": "index.js",
   "author": "Harry Nicholls <harry.m.nicholls@gmail.com>",
   "license": "MIT",
   "scripts": {
     "copy": "cp -R images manifest.json src/popup.html build/",
-    "copy:build-local": "yarn run copy && cp .env.local build/.env",
-    "dev": "parcel build src/popup.js src/background.js -d build --no-content-hash --no-minify && yarn run copy",
-    "build": "parcel build src/popup.js src/background.js src/scripts/get-code-snippets.js -d build --no-content-hash && yarn run copy",
-    "build:local": "parcel build src/popup.js src/background.js src/scripts/get-code-snippets.js -d build --no-content-hash --no-minify && yarn run copy:build-local",
+    "dev": "parcel dev-environment/index.html --out-dir dev-dist/",
+    "build": "parcel build src/popup.tsx src/background.ts src/scripts/get-code-snippets.ts -d build --no-content-hash --no-source-maps && yarn run copy",
     "package": "rm -f get-the-gist.zip && zip -r get-the-gist.zip build",
     "test": "jest"
   },
@@ -19,6 +17,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@octokit/rest": "^16.28.7",
+    "@types/isomorphic-fetch": "^0.0.35",
     "copy-to-clipboard": "^3.2.0",
     "dotenv": "^8.1.0",
     "preact": "^10.0.0-rc.1",
@@ -31,6 +30,10 @@
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "@types/chrome": "^0.0.91",
+    "@types/enzyme": "^3.10.3",
+    "@types/jest": "^24.0.23",
+    "@types/uuid": "^3.4.6",
     "chrome-webstore-upload": "^0.2.2",
     "enzyme": "^3.10.0",
     "enzyme-adapter-preact-pure": "^2.1.0",
@@ -48,6 +51,8 @@
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
     "parcel-bundler": "^1.12.3",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.7.2"
   }
 }

@@ -56,7 +56,6 @@ jobs:
               echo "GITHUB_CLIENT_ID="$GITHUB_DEV_CLIENT_ID >> .env
               echo "GITHUB_CLIENT_SECRET="$GITHUB_DEV_CLIENT_SECRET >> .env
             fi
-            cat .env
             yarn run build
 
       - run:
@@ -76,4 +75,6 @@ jobs:
               export APP_ID=dedacmldgkhekcocalpdeldpmejppjkc
               export PUBLISH_TARGET=trustedTesters
             fi
-            node scripts/update.js
+            if [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "master" ]; then
+              node scripts/update.js
+            fi
