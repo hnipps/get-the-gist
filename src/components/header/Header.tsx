@@ -13,10 +13,8 @@ import { sendEmail } from "../../utils/send-email";
 
 import "./header.css";
 
-const Header = ({ onRefresh, loading }: HeaderProps) => {
+const Header = ({ onRefresh, loading, handleSignOut }: HeaderProps) => {
   const handleFeedbackButtonClick = () => {
-    console.log("Feedback!");
-
     sendEmail("getthegistapp@gmail.com");
   };
   return (
@@ -27,11 +25,18 @@ const Header = ({ onRefresh, loading }: HeaderProps) => {
       <span class="header__icon-wrapper">
         <IconButton
           title="Give feedback"
-          className="header__icon-centre"
           element="button"
           icon={faBullhorn}
           variant="tertiary"
           onClick={handleFeedbackButtonClick}
+        />
+        <IconButton
+          title="Sign out"
+          className="header__icon-centre"
+          element="button"
+          icon={faSignOutAlt}
+          variant="tertiary"
+          onClick={handleSignOut}
         />
         <IconButton
           title="Refresh snippets"
