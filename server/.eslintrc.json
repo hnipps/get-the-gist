@@ -1,0 +1,28 @@
+{
+    "env": {
+        "es6": true,
+        "amd": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "prettier"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly",
+        "process": true,
+        "global": "writable",
+        "module": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "prettier"
+    ],
+    "rules": {
+        "prettier/prettier": "error"
+    }
+}

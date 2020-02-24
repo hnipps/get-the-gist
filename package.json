@@ -1,0 +1,22 @@
+{
+  "name": "get-the-gist",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/hnipps/get-the-gist.git",
+  "author": "Harry Nicholls <harry.m.nicholls@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "5.7.0"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-config-standard-preact": "^1.1.6",
+    "eslint-plugin-jest": "^23.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-standard": "^4.0.1",
+    "prettier": "^1.19.1"
+  }
+}
