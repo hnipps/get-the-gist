@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { mount } from "enzyme";
 
-import * as components from ".";
+import * as components from "../components";
 
 describe("All components", () => {
   (Object.keys(components) as Array<keyof typeof components>).forEach(
