@@ -139,7 +139,7 @@ const Main = ({ currentTab, createGist }: MainProps) => {
   return (
     <Fragment>
       <div className="main">
-        <Header onRefresh={handleRefresh} loading={isRefreshing} />
+        <Header onRefresh={handleRefresh} isLoading={isRefreshing} />
         <List>
           {snippetList ? (
             snippetList.map(codeBlock => (

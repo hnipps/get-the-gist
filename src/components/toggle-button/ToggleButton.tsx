@@ -5,15 +5,15 @@ import IconButton from "../icon-button/IconButton";
 import { ToggleButtonProps } from "./toggle-button.props";
 
 const ToggleButton = ({
-  icon: { on: onIcon, off: offIcon },
-  classes: { on: onClass, off: offClass },
-  onClick: { on: onOnClick, off: offOnClick },
+  icon: { on: onIcon, off: offIcon } = {on: 'check', off: 'plus'},
+  classes: { on: onClass, off: offClass } = {on: '', off: ''},
+  onClick: { on: onOnClick, off: offOnClick } = {on: () => null, off: () => null},
   ...props
 }: ToggleButtonProps) => {
   const [isOn, setIsOnState] = useState(false);
   const handleClick = useCallback(
     (ev: MouseEvent) => {
-      isOn ? onOnClick(ev) : offOnClick(ev);
+      isOn ? onOnClick?.(ev) : offOnClick?.(ev);
       setIsOnState(!isOn);
     },
     [isOn, onOnClick, offOnClick, setIsOnState]

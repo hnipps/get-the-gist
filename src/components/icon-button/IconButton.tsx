@@ -9,7 +9,7 @@ import "./icon-button.css";
 const IconButton = ({
   icon,
   variant,
-  loading = false,
+  isLoading = false,
   element: Element = "button",
   className,
   size,
@@ -17,7 +17,7 @@ const IconButton = ({
   ...props
 }: IconButtonProps) => {
   const variantClass = variant ? `icon-button--${variant}` : "";
-  const loadingClass = loading ? "icon-button--loading" : "";
+  const loadingClass = isLoading ? "icon-button--loading" : "";
   const sizeClass = size === "s" ? "icon-button--small" : "";
   const colorClass = `icon-button--${color}`;
 
@@ -34,7 +34,7 @@ const IconButton = ({
         colorClass,
         className
       )}
-      disabled={loading}
+      disabled={isLoading}
       {...props}
     >
       {Icon}

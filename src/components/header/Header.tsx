@@ -13,7 +13,7 @@ import { sendEmail } from "../../utils/send-email";
 
 import "./header.css";
 
-const Header = ({ onRefresh, loading }: HeaderProps) => {
+const Header = ({ onRefresh, isLoading }: HeaderProps) => {
   const handleFeedbackButtonClick = () => {
     console.log("Feedback!");
 
@@ -38,7 +38,7 @@ const Header = ({ onRefresh, loading }: HeaderProps) => {
           icon={faSyncAlt}
           variant="primary"
           onClick={onRefresh}
-          loading={loading}
+          isLoading={isLoading}
           color="light"
         />
       </span>

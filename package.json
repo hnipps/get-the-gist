@@ -1,5 +1,5 @@
 {
-  "name": "gistify",
+  "name": "get-the-gist",
   "version": "1.1.1",
   "main": "index.js",
   "author": "Harry Nicholls <harry.m.nicholls@gmail.com>",
@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@aduh95/preact-fontawesome": "^0.1.4",
-    "@fortawesome/fontawesome-svg-core": "^1.2.22",
-    "@fortawesome/free-regular-svg-icons": "^5.10.2",
-    "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-regular-svg-icons": "^5.14.0",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@octokit/rest": "^16.28.7",
     "@types/isomorphic-fetch": "^0.0.35",
     "copy-to-clipboard": "^3.2.0",
@@ -25,11 +25,11 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-syntax-async-generators": "^7.2.0",
-    "@babel/plugin-transform-react-jsx": "^7.3.0",
-    "@babel/plugin-transform-runtime": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
+    "@babel/core": "^7.11.4",
+    "@babel/plugin-syntax-async-generators": "^7.8.4",
+    "@babel/plugin-transform-react-jsx": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
     "@types/chrome": "^0.0.91",
     "@types/enzyme": "^3.10.3",
     "@types/jest": "^24.0.23",

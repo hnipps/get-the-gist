@@ -5,7 +5,7 @@ export interface IconButtonProps
   extends Omit<JSX.HTMLAttributes, "icon" | "size"> {
   icon: IconProp;
   variant: "primary" | "secondary" | "tertiary";
-  loading?: boolean;
+  isLoading?: boolean;
   element?: "a" | "button";
   size?: "s" | "l";
   color?: "dark" | "light";
