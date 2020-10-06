@@ -1,7 +1,7 @@
 import { h, render } from "preact";
 import { useState, useEffect } from "preact/hooks";
 
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 
 import "./popup.css";
 
