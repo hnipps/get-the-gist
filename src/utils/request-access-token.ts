@@ -7,27 +7,27 @@ const accessTokenSubject = new Subject();
 export const accessToken$ = accessTokenSubject.asObservable();
 
 export const requestAccessToken = (code: string, redirect_uri: string) => {
-  const baseUrl = "https://github.com/login/oauth/access_token";
+  const baseUrl = "http://127.0.0.1:5000/access-token";
   // The data we are going to send in our request
   const params = {
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
     code,
-    redirect_uri
   };
   // The parameters we are gonna pass to the fetch function
   const fetchData = {
-    method: "POST",
+    method: "GET",
     headers: new Headers({ Accept: "application/json" })
   };
   const accessUrl = baseUrl + "?" + queryString.stringify(params);
 
+  
+  
   return fetch(accessUrl, fetchData)
-    .then(res =>
-      res
-        .json()
-        .then(({ access_token: accessToken }) => {
-          accessTokenSubject.next(accessToken);
+  .then(res =>
+    res
+    .json()
+    .then((res) => {
+      console.log('resposnse', res);
+      accessTokenSubject.next(res['access_token']);
         })
         .catch(
           err =>
